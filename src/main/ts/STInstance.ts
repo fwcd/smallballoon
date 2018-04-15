@@ -6,11 +6,16 @@ import { STMessage } from "./STMessage";
  * An instance of a Smalltalk class.
  */
 export class STInstance extends STObject {
-	readonly stClass: STClass
+	readonly stClass: STClass;
 
 	constructor(stClass: STClass) {
 		super();
 		this.stClass = stClass;
+	}
+
+	// Override
+	public getClassName(): string {
+		return this.stClass.name;
 	}
 
 	// Override

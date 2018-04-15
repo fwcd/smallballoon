@@ -1,5 +1,6 @@
 import { STMessage } from "./STMessage";
 import { STNil } from "./STNil";
+import { LOG } from "./utils/Logger";
 
 /**
  * A Smalltalk object that can receive messages.
@@ -7,7 +8,12 @@ import { STNil } from "./STNil";
  */
 export class STObject {
 	public receiveMessage(message: STMessage): STObject {
+		LOG.trace("{} sent {} to {}", this.getClassName(), message, message.receiver.getClassName());
 		return STNil.get();
+	}
+
+	public getClassName(): string {
+		return "Object";
 	}
 
 	public isNil(): boolean {

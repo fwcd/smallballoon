@@ -1,15 +1,19 @@
-import { STParseException } from "./STParseException";
+import { STParseException } from "./utils/STParseException";
 import { STContext } from "./STContext";
 import { STObject } from "./STObject";
 import { STMessage, STMessageParameter } from "./STMessage";
 import { STNil } from "./STNil";
 import { STBlock } from "./STBlock";
+import { strSurroundedBy } from "./utils/StringUtils";
+import { STString } from "./STString";
+import { LOG } from "./utils/Logger";
 
 /**
  * Represents a Smalltalk scope containing
  * expressions and variables.
  * 
- * Inteprets and runs Smalltalk code internally. 
+ * Inteprets, parses and runs Smalltalk code
+ * under the hood. 
  */
 export class STScope {
 	private expressions: string[];
@@ -21,13 +25,14 @@ export class STScope {
 		this.expressions = formattedCode.split(".");
 	}
 
-	public run() {
+	public run(): void {
 		this.expressions.forEach(expression => {
 			this.evaluateExpression(expression);
 		});
 	}
 
 	private evaluateExpression(expression: string): STObject {
+		LOG.trace("Evaluating {}", expression);
 		return this.getExpressionEvaluator(expression)();
 	}
 
@@ -38,6 +43,8 @@ export class STScope {
 			return () => STNil.get();
 		} else if (this.isBlock(trimmedExpression)) {
 			return this.getBlockFetcher(trimmedExpression);
+		} else if (this.isStringLiteral(trimmedExpression)) {
+			return this.getStringFetcher(trimmedExpression);
 		} else if (this.isAssignment(trimmedExpression)) {
 			return this.getAssignmentRunner(trimmedExpression);
 		} else if (this.isMessage(trimmedExpression)) {
@@ -81,6 +88,11 @@ export class STScope {
 		return new STMessage(receiver, parameters);
 	}
 
+	private getStringFetcher(expression: string): () => STString {
+		let str = new STString(expression.slice(1, expression.length - 1));
+		return () => str;
+	}
+
 	private getBlockFetcher(expression: string): () => STBlock {
 		// Remove the leading and trailing square brackets
 		let rawBlockCode = expression.slice(1, expression.length - 1);
@@ -99,6 +111,12 @@ export class STScope {
 		};
 	}
 	
+	private isStringLiteral(expression: string): boolean {
+		// Matches:
+		// "<Any Sequence>"
+		return strSurroundedBy(expression, "\"", "\"");
+	}
+
 	private isMessage(expression: string): boolean {
 		// Matches:
 		// <Word> <Word>
@@ -116,6 +134,6 @@ export class STScope {
 	private isBlock(expression: string): boolean {
 		// Matches:
 		// [<Any Sequence>]
-		return /^\[.*\]$/.test(expression);
+		return strSurroundedBy(expression, "[", "]");
 	}
 }

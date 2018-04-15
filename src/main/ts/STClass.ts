@@ -11,6 +11,12 @@ export class STClass extends STObject {
 	private fieldNames: string[];
 	private classMethods: { [selector: string] : () => STObject; } = {};
 	private instanceMethods: { [selector: string] : (STObject) => STObject; } = {};
+	readonly name: string;
+
+	public constructor(name: string) {
+		super();
+		this.name = name;
+	}
 
 	// Override
 	public receiveMessage(message: STMessage): STObject {
@@ -34,7 +40,10 @@ export class STClass extends STObject {
 		return STNil.get();
 	}
 
-	public 
+	// Override
+	public getClassName(): string {
+		return "Class";
+	}
 
 	public receiveInstanceMessage(instance: STInstance, message: STMessage): STObject {
 		let selector: string = message.getSelector().value;

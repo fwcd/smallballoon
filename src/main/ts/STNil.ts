@@ -14,6 +14,11 @@ export class STNil extends STObject {
 	}
 
 	// Override
+	public getClassName(): string {
+		return "Nil";
+	}
+
+	// Override
 	public isNil(): boolean {
 		return true;
 	}

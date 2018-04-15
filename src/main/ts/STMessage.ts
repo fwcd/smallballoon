@@ -21,13 +21,19 @@ export interface STMessageParameter {
  * The combination of labels is also referred
  * to as the "selector" of the message.
  */
-export class STMessage {
+export class STMessage extends STObject {
 	readonly receiver: STObject;
 	readonly parameters: STMessageParameter[];
 
 	public constructor(receiver: STObject, parameters: STMessageParameter[]) {
+		super();
 		this.receiver = receiver;
 		this.parameters = parameters;
+	}
+
+	// Override
+	public getClassName(): string {
+		return "Message";
 	}
 
 	/**
