@@ -1,0 +1,18 @@
+{
+  "name": "balloon",
+  "version": "1.0.0",
+  "description": "Smalltalk interpreter",
+  "main": "build/main/ts/index.js",
+  "scripts": {
+    "main": "node build/main/ts/index.js",
+    "test": "node build/test/ts/index.js"
+  },
+  "keywords": [
+    "smalltalk"
+  ],
+  "author": "fwcd",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^9.6.5"
+  }
+}

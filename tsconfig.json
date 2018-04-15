@@ -1,0 +1,14 @@
+{
+	"compilerOptions": {
+		"module": "commonjs",
+		"outDir": "build",
+		"moduleResolution": "node"
+	},
+	"exclude": [
+		"node_modules",
+		"!node_modules/@types"
+	],
+	"include": [
+		"src/**/*"
+	]
+}
