@@ -3,7 +3,7 @@ import { STSelector } from "./STSelector";
 
 export interface STMessageParameter {
 	readonly label: string;
-	readonly value: string;
+	readonly value: STObject;
 }
 
 /**

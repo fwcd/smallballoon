@@ -1,5 +1,5 @@
 import * as fs from "fs";
-import { STApplication } from "./STApplication";
+import { STScope } from "./STScope";
 
 /**
  * Executes Smalltalk source code/files.
@@ -10,9 +10,6 @@ export class STInterpreter {
 	}
 
 	public runSTCode(rawCode: string) {
-		let formattedCode: string = rawCode
-				.replace(/(\r\n|\n|\r)/gm, ""); // Remove line breaks
-		let expressions: string[] = formattedCode.split(".");
-		new STApplication(expressions).run();
+		new STScope(rawCode).run();
 	}
 }
