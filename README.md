@@ -1,6 +1,10 @@
 # Balloon
 A Smalltalk interpreter for TypeScript/NodeJS.
 
+## Dependencies
+* TypeScript 2.8.1 (development)
+* ES5 (target)
+
 ## Setup
 * Run: npm install -g typescript
 
