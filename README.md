@@ -1,6 +1,8 @@
 # Balloon
 A Smalltalk interpreter for TypeScript/NodeJS.
 
+The project is still in a very early stage, so expect parts of it to lack functionality or not work at all.
+
 ## Dependencies
 * TypeScript 2.8.1 (development)
 * ES5 (target)
