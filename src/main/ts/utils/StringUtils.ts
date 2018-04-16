@@ -55,6 +55,39 @@ export function strSurroundedBy(str: string, prefix: string, postfix: string): b
 }
 
 /**
+ * Uses stack parsing with nested brackets to determine whether
+ * there provided brackets actually enclose the
+ * entire content.
+ * 
+ * @param str - The string to be tested
+ * @param openingBracket - The opening bracket character
+ * @param closingBracket - The closing bracket character
+ */
+export function strSurroundedByBrackets(str: string, openingBracket: string, closingBracket: string): boolean {
+	let stackHeight: number = 0;
+
+	if (!strSurroundedBy(str, openingBracket, closingBracket)) {
+		return false;
+	}
+
+	for (let i=0; i<str.length-1; i++) {
+		let c = str.charAt(i);
+
+		if (c === openingBracket) {
+			stackHeight++;
+		} else if (c === closingBracket) {
+			stackHeight--;
+		}
+
+		if (stackHeight < 1) {
+			return false;
+		}
+	}
+
+	return true;
+}
+
+/**
  * Checks whether a string contains another string.
  * Mainly used to improve readability.
  * 

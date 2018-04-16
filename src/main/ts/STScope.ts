@@ -4,9 +4,10 @@ import { STObject } from "./STObject";
 import { STMessage, STMessageParameter } from "./STMessage";
 import { STNil } from "./STNil";
 import { STBlock } from "./STBlock";
-import { strSurroundedBy, strSplitOnce, strFixedTrim, strSplitWithTail } from "./utils/StringUtils";
+import { strSurroundedBy, strSplitOnce, strFixedTrim, strSplitWithTail, strSurroundedByBrackets } from "./utils/StringUtils";
 import { STString } from "./STString";
 import { LOG } from "./utils/Logger";
+import { STNumber } from "./STNumber";
 
 /**
  * Represents a Smalltalk scope containing
@@ -51,6 +52,9 @@ export class STScope {
 
 		} else if (this.isStringLiteral(trimmedExpression)) {
 			return this.getStringFetcher(trimmedExpression);
+
+		} else if (this.isNumberLiteral(trimmedExpression)) {
+			return () => new STNumber(+trimmedExpression);
 
 		} else if (this.context.hasVariable(trimmedExpression)) {
 			return () => this.context.getVariable(trimmedExpression);
@@ -173,7 +177,11 @@ export class STScope {
 	private isInParentheses(expression: string): boolean {
 		// Matches:
 		// (<Any Sequence>)
-		return strSurroundedBy(expression, "(", ")");
+		return strSurroundedByBrackets(expression, "(", ")");
+	}
+
+	private isNumberLiteral(expression: string): boolean {
+		return !isNaN(+expression); // + converts expression to either number or NaN
 	}
 
 	private isStringLiteral(expression: string): boolean {
@@ -199,6 +207,6 @@ export class STScope {
 	private isBlock(expression: string): boolean {
 		// Matches:
 		// [<Any Sequence>]
-		return strSurroundedBy(expression, "[", "]");
+		return strSurroundedByBrackets(expression, "[", "]");
 	}
 }
