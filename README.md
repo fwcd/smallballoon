@@ -8,15 +8,15 @@ The project is still in a very early stage, so expect parts of it to lack functi
 * ES5 (target)
 
 ## Setup
-* Run: npm install -g typescript
+>`npm install -g typescript`
 
 ## Compile sources
-* Run: tsc
-	* Optionally enable the -w flag to automatically compile changes
-* The JS sources will appear in the build folder
+>`tsc` (Optionally enable the -w flag to automatically compile changes.)
+
+The JS sources will appear in the build folder
 
 ## Run main sources
-* Run: npm run main -- path/to/your/smalltalk/app.st
+>`npm run main -- path/to/your/smalltalk/app.st`
 
 ## Run test sources
-* Run: npm run test
+>`npm run test`
