@@ -4,7 +4,7 @@ import { STObject } from "./STObject";
 import { STMessage, STMessageParameter } from "./STMessage";
 import { STNil } from "./STNil";
 import { STBlock } from "./STBlock";
-import { strSurroundedBy } from "./utils/StringUtils";
+import { strSurroundedBy, strSplitOnce } from "./utils/StringUtils";
 import { STString } from "./STString";
 import { LOG } from "./utils/Logger";
 
@@ -33,7 +33,7 @@ export class STScope {
 
 	private evaluateExpression(expression: string): STObject {
 		let result = this.getExpressionEvaluator(expression)();
-		LOG.trace("Evaluated '{}' to {}", expression, result);
+		LOG.deepTrace("Evaluated '{}' to {}", expression, result);
 		return result;
 	}
 
@@ -44,19 +44,15 @@ export class STScope {
 			return () => new STNil("STScope.getExpressionEvaluator(...)");
 
 		} else if (this.isBlock(trimmedExpression)) {
-			LOG.trace("'{}' is a block", expression);
 			return this.getBlockFetcher(trimmedExpression);
 
 		} else if (this.isStringLiteral(trimmedExpression)) {
-			LOG.trace("'{}' is a string literal", expression);
 			return this.getStringFetcher(trimmedExpression);
 
 		} else if (this.isAssignment(trimmedExpression)) {
-			LOG.trace("'{}' is an assignment", expression);
 			return this.getAssignmentRunner(trimmedExpression);
 
 		} else if (this.isMessage(trimmedExpression)) {
-			LOG.trace("'{}' is a message", expression);
 			return this.getMessageRunner(trimmedExpression);
 
 		} else {
@@ -65,11 +61,11 @@ export class STScope {
 	}
 
 	private getMessageRunner(expression: string): () => STObject {
-		let splittedExpression = expression.split(" ", 2);
+		let splittedExpression = strSplitOnce(expression, " ");
 
 		return () => {
 			let receiver: STObject = this.context.getVariable(splittedExpression[0]);
-			return receiver.receiveMessage(this.parseMessage(receiver, splittedExpression[1]))
+			return receiver.receiveMessage(this.parseMessage(receiver, splittedExpression[1]));
 		};
 	}
 
@@ -80,14 +76,23 @@ export class STScope {
 		let currentLabel: string = "";
 		let currentValue: STObject = new STNil("STScope.parseMessage(...)");
 		let nextLabel: string = shiftedSplit[0].trim();
-
+		
 		for (let i=1; i<shiftedSplit.length; i++) {
 			let current = shiftedSplit[i].trim();
 			let currentSplit = current.split(" ");
 
 			currentLabel = nextLabel;
 			nextLabel = currentSplit[currentSplit.length - 1];
-			currentValue = this.evaluateExpression(current.slice(0, current.length - nextLabel.length));
+
+			let currentValueStr: string;
+
+			if (i == (shiftedSplit.length - 1)) { // If in last iteration
+				currentValueStr = current;
+			} else {
+				currentValueStr = current.slice(0, current.length - nextLabel.length);
+			}
+
+			currentValue = this.evaluateExpression(currentValueStr);
 			
 			parameters.push({
 				label: currentLabel,
@@ -112,7 +117,7 @@ export class STScope {
 	}
 
 	private getAssignmentRunner(expression: string): () => STNil {
-		let splittedExpression: string[] = expression.split(/ ?:= ?/, 2);
+		let splittedExpression: string[] = strSplitOnce(expression, / ?:= ?/);
 
 		return () => {
 			let assignedObject = this.evaluateExpression(expression[1]);

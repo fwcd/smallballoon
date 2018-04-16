@@ -4,7 +4,7 @@ import { STObject } from "./STObject";
  * A Smalltalk object representing "nothing".
  * Similar to null/void in other languages.
  * 
- * Implemented as a singleton.
+ * Tracks it's creator to ease debugging.
  */
 export class STNil extends STObject {
 	private static INSTANCE: STNil = new STNil("anonymous");
@@ -22,7 +22,7 @@ export class STNil extends STObject {
 
 	// Override
 	public toString(): string {
-		return "nil {created by " + this.creator.toString() + "}";
+		return "nil (created by " + this.creator.toString() + ")";
 	}
 
 	// Override

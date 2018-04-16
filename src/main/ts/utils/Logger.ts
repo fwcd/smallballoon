@@ -1,9 +1,11 @@
 export enum LogLevel {
+	DeepTrace = -3,
 	Trace = -2,
 	Debug = -1,
 	Info = 0,
 	Warn = 1,
-	Error = 2
+	Error = 2,
+	None = 100000
 }
 
 /**
@@ -18,16 +20,18 @@ class Logger {
 	}
 
 	/**
-	 * Logs a string.
+	 * Logs a string internally. It should only be called
+	 * once through an internal method to display the
+	 * caller that originally logged the string.
 	 * 
 	 * @param prefix - An appended prefix
 	 * @param msg - The message including {} placeholders
 	 * @param insertions - The items that replace their respective placeholders
 	 * @param msgLevel - The log level of the message
 	 */
-	public log(prefix: string, msg: string, insertions: any[], msgLevel: LogLevel): void {
+	private log(prefix: string, msg: string, insertions: any[], msgLevel: LogLevel): void {
 		if (this.level <= msgLevel) {
-			let output = prefix + "\t";
+			let output = prefix;
 			let charIndex = 0;
 			let placeholderIndex = 0;
 
@@ -48,25 +52,29 @@ class Logger {
 		}
 	}
 
+	public deepTrace(msg: string, ...insertions: any[]): void {
+		this.log("[DEEP_TRACE] ", msg, insertions, LogLevel.DeepTrace);
+	}
+
 	public trace(msg: string, ...insertions: any[]): void {
-		this.log("[TRACE]", msg, insertions, LogLevel.Trace);
+		this.log("[TRACE]      ", msg, insertions, LogLevel.Trace);
 	}
 
 	public debug(msg: string, ...insertions: any[]): void {
-		this.log("[DEBUG]", msg, insertions, LogLevel.Debug);
+		this.log("[DEBUG]      ", msg, insertions, LogLevel.Debug);
 	}
 
 	public info(msg: string, ...insertions: any[]): void {
-		this.log("[INFO]", msg, insertions, LogLevel.Info);
+		this.log("[INFO]       ", msg, insertions, LogLevel.Info);
 	}
 
 	public warn(msg: string, ...insertions: any[]): void {
-		this.log("[WARN]", msg, insertions, LogLevel.Warn);
+		this.log("[WARN]       ", msg, insertions, LogLevel.Warn);
 	}
 
 	public error(msg: string, ...insertions: any[]): void {
-		this.log("[ERROR]", msg, insertions, LogLevel.Error);
+		this.log("[ERROR]      ", msg, insertions, LogLevel.Error);
 	}
 }
 
-export const LOG = new Logger(LogLevel.Info);
+export const LOG = new Logger(LogLevel.None);
