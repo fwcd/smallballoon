@@ -40,7 +40,7 @@ export class STScope {
 
 	private getExpressionEvaluator(expression: string): () => STObject {
 		let trimmedExpression = expression.trim();
-
+		
 		if (trimmedExpression.length === 0) {
 			return () => new STNil("STScope.getExpressionEvaluator(...)");
 
@@ -74,7 +74,7 @@ export class STScope {
 		let splittedExpression = strSplitOnce(expression, " ");
 
 		return () => {
-			let receiver: STObject = this.context.getVariable(splittedExpression[0]);
+			let receiver: STObject = this.evaluateExpression(splittedExpression[0]);
 			return receiver.receiveMessage(this.parseMessage(receiver, splittedExpression[1]));
 		};
 	}
@@ -95,9 +95,9 @@ export class STScope {
 			} else {
 				currentParameter += c;
 
-				if (c == "[" || c == "(") {
+				if (c === "[" || c === "(") {
 					stackHeight++;
-				} else if (c == "]" || c == ")") {
+				} else if (c === "]" || c === ")") {
 					stackHeight--;
 				}
 

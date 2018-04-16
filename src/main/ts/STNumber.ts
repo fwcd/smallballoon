@@ -21,10 +21,10 @@ export class STNumber extends STObject {
 
 		if (firstArgument instanceof STNumber) {
 			switch (selector) {
-			case "+": return this.combine(firstArgument, (a, b) => a + b);
-			case "-": return this.combine(firstArgument, (a, b) => a - b);
-			case "*": return this.combine(firstArgument, (a, b) => a * b);
-			case "/": return this.combine(firstArgument, (a, b) => a / b);
+			case "plus": return this.combine(firstArgument, (a, b) => a + b);
+			case "minus": return this.combine(firstArgument, (a, b) => a - b);
+			case "times": return this.combine(firstArgument, (a, b) => a * b);
+			case "divide": return this.combine(firstArgument, (a, b) => a / b);
 			}
 		}
 
