@@ -1,2 +1,2 @@
 Transscript show:"Hello World!".
-Transscript show:"Test".
+Transscript show:(Transscript show:"Test").

@@ -1,4 +1,16 @@
 /**
+ * Returns a centered subsequence of
+ * the string by cutting of a specified amount
+ * of leading and trailing characters.
+ * 
+ * @param str - The string to be used
+ * @param charCount - The amount of character to be cut off on each end
+ */
+export function strFixedTrim(str: string, charCount: number) {
+	return str.slice(charCount, str.length - charCount);
+}
+
+/**
  * Splits the string at the first occurence of
  * the delimiter and returns a two-element
  * array containing the first part and the rest

@@ -4,7 +4,7 @@ import { STObject } from "./STObject";
 import { STMessage, STMessageParameter } from "./STMessage";
 import { STNil } from "./STNil";
 import { STBlock } from "./STBlock";
-import { strSurroundedBy, strSplitOnce } from "./utils/StringUtils";
+import { strSurroundedBy, strSplitOnce, strFixedTrim } from "./utils/StringUtils";
 import { STString } from "./STString";
 import { LOG } from "./utils/Logger";
 
@@ -43,6 +43,9 @@ export class STScope {
 		if (trimmedExpression.length === 0) {
 			return () => new STNil("STScope.getExpressionEvaluator(...)");
 
+		} else if (this.isInParentheses(trimmedExpression)) {
+			return this.getUnwrappedExpressionEvaluator(trimmedExpression);
+
 		} else if (this.isBlock(trimmedExpression)) {
 			return this.getBlockFetcher(trimmedExpression);
 
@@ -69,9 +72,45 @@ export class STScope {
 		};
 	}
 
+	private splitMessageParametersByColon(rawParameters: string): string[] {
+		let result: string[] = [];
+		let trimmedParameters = rawParameters.replace(/ ?: ?/, ":");
+
+		let currentParameter: string = "";
+		let stackHeight: number = 0;
+
+		for (let i=0; i<trimmedParameters.length; i++) {
+			let c = trimmedParameters.charAt(i);
+
+			if (stackHeight == 0 && c == ":") {
+				result.push(currentParameter);
+				currentParameter = "";
+			} else {
+				currentParameter += c;
+
+				if (c == "[" || c == "(") {
+					stackHeight++;
+				} else if (c == "]" || c == ")") {
+					stackHeight--;
+				}
+
+				if (stackHeight < 0) {
+					throw new STParseException("Inconsistent brackets in message parameters: " + rawParameters);
+				}
+			}
+		}
+		result.push(currentParameter);
+
+		if (stackHeight != 0) {
+			throw new STParseException("Inconsistent brackets in message parameters: " + rawParameters);
+		}
+
+		return result;
+	}
+
 	private parseMessage(receiver: STObject, rawParameters: string): STMessage {
 		let parameters: STMessageParameter[] = [];
-		let shiftedSplit = rawParameters.split(/ ?: ?/);
+		let shiftedSplit = this.splitMessageParametersByColon(rawParameters);
 
 		let currentLabel: string = "";
 		let currentValue: STObject = new STNil("STScope.parseMessage(...)");
@@ -103,16 +142,18 @@ export class STScope {
 		return new STMessage(receiver, parameters);
 	}
 
+	private getUnwrappedExpressionEvaluator(expression: string): () => STObject {
+		return this.getExpressionEvaluator(strFixedTrim(expression, 1));
+	}
+
 	private getStringFetcher(expression: string): () => STString {
-		let str = new STString(expression.slice(1, expression.length - 1));
+		let str = new STString(strFixedTrim(expression, 1));
 		return () => str;
 	}
 
 	private getBlockFetcher(expression: string): () => STBlock {
 		// Remove the leading and trailing square brackets
-		let rawBlockCode = expression.slice(1, expression.length - 1);
-		let block = new STBlock(new STScope(rawBlockCode));
-
+		let block = new STBlock(new STScope(strFixedTrim(expression, 1)));
 		return () => block;
 	}
 
@@ -126,6 +167,12 @@ export class STScope {
 		};
 	}
 	
+	private isInParentheses(expression: string): boolean {
+		// Matches:
+		// (<Any Sequence>)
+		return strSurroundedBy(expression, "(", ")");
+	}
+
 	private isStringLiteral(expression: string): boolean {
 		// Matches:
 		// "<Any Sequence>"
