@@ -36,6 +36,13 @@ export class STMessage extends STObject {
 		return "Message";
 	}
 
+	// Override
+	public toString(): string {
+		return this.parameters
+				.map(param => param.label + ":" + param.value.toString())
+				.reduceRight((previous, current) => current + " " + previous);
+	}
+
 	/**
 	 * Returns the first argument label.
 	 */

@@ -26,10 +26,10 @@ export class STBlock extends STObject {
 	}
 
 	// Override
-	public receiveMessage(message: STMessage): STObject {
+	public handleMessage(message: STMessage): STObject {
 		// TODO: Accept messages with selector "value"
 		// and evaluate expression then.
 
-		return STNil.get();
+		return new STNil(this);
 	}
 }

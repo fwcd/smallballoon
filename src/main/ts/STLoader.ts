@@ -3,9 +3,9 @@ import { STScope } from "./STScope";
 import { LOG } from "./utils/Logger";
 
 /**
- * Executes Smalltalk source code/files.
+ * Smalltalk source code/file loader.
  */
-export class STInterpreter {
+export class STLoader {
 	public runFile(fileName: string) {
 		LOG.debug("Running file {}", fileName);
 		this.runSTCode(fs.readFileSync(fileName, "utf8"));

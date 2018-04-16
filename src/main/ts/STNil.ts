@@ -7,10 +7,12 @@ import { STObject } from "./STObject";
  * Implemented as a singleton.
  */
 export class STNil extends STObject {
-	private static instance = new STNil();
+	private static INSTANCE: STNil = new STNil("anonymous");
+	private creator: string;
 
-	private constructor() {
+	public constructor(creator: string | STObject) {
 		super();
+		this.creator = creator.toString();
 	}
 
 	// Override
@@ -19,11 +21,22 @@ export class STNil extends STObject {
 	}
 
 	// Override
+	public toString(): string {
+		return "nil {created by " + this.creator.toString() + "}";
+	}
+
+	// Override
 	public isNil(): boolean {
 		return true;
 	}
 
-	public static get(): STNil {
-		return STNil.instance;
+	/**
+	 * Fetches an anonymous instance of STNil.
+	 * 
+	 * You should prefer to use the constructor
+	 * over this function.
+	 */
+	public static getAnonymously(): STNil {
+		return STNil.INSTANCE;
 	}
 }

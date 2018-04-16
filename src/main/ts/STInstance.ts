@@ -19,7 +19,7 @@ export class STInstance extends STObject {
 	}
 
 	// Override
-	public receiveMessage(message: STMessage): STObject {
+	public handleMessage(message: STMessage): STObject {
 		return this.stClass.receiveInstanceMessage(this, message);
 	}
 }

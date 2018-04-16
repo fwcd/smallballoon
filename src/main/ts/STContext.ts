@@ -20,7 +20,7 @@ export class STContext {
 		if (name in this.variables) {
 			return this.variables[name];
 		} else {
-			return STNil.get();
+			return new STNil("STContext.getVariable(...)");
 		}
 	}
 }

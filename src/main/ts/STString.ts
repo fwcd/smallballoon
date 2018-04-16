@@ -15,9 +15,14 @@ export class STString extends STObject {
 	}
 
 	// Override
-	public receiveMessage(message: STMessage): STObject {
+	public handleMessage(message: STMessage): STObject {
 		// TODO: More functionality
-		return STNil.get();
+		return new STNil(this);
+	}
+
+	// Override
+	public toString(): string {
+		return this.value;
 	}
 
 	// Override

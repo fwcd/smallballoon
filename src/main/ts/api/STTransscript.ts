@@ -11,14 +11,14 @@ import { STNil } from "../STNil";
  */
 export class STTransscript extends STObject {
 	// Override
-	public receiveMessage(message: STMessage): STObject {
+	public handleMessage(message: STMessage): STObject {
 		let selector = message.getSelector().value;
 
 		switch (selector) {
 		case "show":
-			console.log(message);
+			console.log(message.parameters[0].value.toString());
 		default:
-			return STNil.get();
+			return new STNil(this);
 		}
 	}
 

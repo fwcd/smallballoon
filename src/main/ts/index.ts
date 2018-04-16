@@ -1,5 +1,5 @@
 import * as process from "process"
-import { STInterpreter } from "./STInterpreter"
+import { STLoader } from "./STLoader"
 
-let interpreter = new STInterpreter();
+let interpreter = new STLoader();
 interpreter.runFile(process.argv[2]);

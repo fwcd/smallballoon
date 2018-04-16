@@ -32,23 +32,33 @@ export class STScope {
 	}
 
 	private evaluateExpression(expression: string): STObject {
-		LOG.trace("Evaluating {}", expression);
-		return this.getExpressionEvaluator(expression)();
+		let result = this.getExpressionEvaluator(expression)();
+		LOG.trace("Evaluated '{}' to {}", expression, result);
+		return result;
 	}
 
 	private getExpressionEvaluator(expression: string): () => STObject {
 		let trimmedExpression = expression.trim();
 
 		if (trimmedExpression.length === 0) {
-			return () => STNil.get();
+			return () => new STNil("STScope.getExpressionEvaluator(...)");
+
 		} else if (this.isBlock(trimmedExpression)) {
+			LOG.trace("'{}' is a block", expression);
 			return this.getBlockFetcher(trimmedExpression);
+
 		} else if (this.isStringLiteral(trimmedExpression)) {
+			LOG.trace("'{}' is a string literal", expression);
 			return this.getStringFetcher(trimmedExpression);
+
 		} else if (this.isAssignment(trimmedExpression)) {
+			LOG.trace("'{}' is an assignment", expression);
 			return this.getAssignmentRunner(trimmedExpression);
+
 		} else if (this.isMessage(trimmedExpression)) {
+			LOG.trace("'{}' is a message", expression);
 			return this.getMessageRunner(trimmedExpression);
+
 		} else {
 			throw new STParseException("Could not identify expression: " + expression);
 		}
@@ -68,8 +78,8 @@ export class STScope {
 		let shiftedSplit = rawParameters.split(/ ?: ?/);
 
 		let currentLabel: string = "";
-		let currentValue: STObject = STNil.get();
-		let nextLabel: string = "";
+		let currentValue: STObject = new STNil("STScope.parseMessage(...)");
+		let nextLabel: string = shiftedSplit[0].trim();
 
 		for (let i=1; i<shiftedSplit.length; i++) {
 			let current = shiftedSplit[i].trim();
@@ -107,7 +117,7 @@ export class STScope {
 		return () => {
 			let assignedObject = this.evaluateExpression(expression[1]);
 			this.context.setVariable(expression[0], assignedObject);
-			return STNil.get();
+			return new STNil("STScope.getAssignmentRunner(...)");
 		};
 	}
 	

@@ -7,9 +7,14 @@ import { LOG } from "./utils/Logger";
  * Responds with nil to every message by default.
  */
 export class STObject {
+	// Do not override this method
 	public receiveMessage(message: STMessage): STObject {
-		LOG.trace("{} sent {} to {}", this.getClassName(), message, message.receiver.getClassName());
-		return STNil.get();
+		LOG.trace("{} received {}", this, message);
+		return this.handleMessage(message);
+	}
+
+	public handleMessage(message: STMessage): STObject {
+		return new STNil(this);
 	}
 
 	public getClassName(): string {
@@ -26,5 +31,9 @@ export class STObject {
 		} else {
 			return this;
 		}
+	}
+
+	public toString() {
+		return "{" + this.getClassName() + "}";
 	}
 }

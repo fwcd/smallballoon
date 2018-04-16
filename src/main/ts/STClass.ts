@@ -19,7 +19,7 @@ export class STClass extends STObject {
 	}
 
 	// Override
-	public receiveMessage(message: STMessage): STObject {
+	public handleMessage(message: STMessage): STObject {
 		let selector: string = message.getSelector().value;
 
 		if (selector in this.classMethods) {
@@ -37,7 +37,7 @@ export class STClass extends STObject {
 			// TODO
 		}
 
-		return STNil.get();
+		return new STNil(this);
 	}
 
 	// Override
@@ -48,11 +48,13 @@ export class STClass extends STObject {
 	public receiveInstanceMessage(instance: STInstance, message: STMessage): STObject {
 		let selector: string = message.getSelector().value;
 
+		// TODO: Implement Smalltalk superclasses and delegate
+
 		if (selector in this.instanceMethods) {
 			// Call instance method using instance
 			return this.instanceMethods[selector](instance);
 		} else {
-			return STNil.get();
+			return new STNil(this);
 		}
 	}
 }
