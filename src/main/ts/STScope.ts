@@ -4,7 +4,7 @@ import { STObject } from "./STObject";
 import { STMessage, STMessageParameter } from "./STMessage";
 import { STNil } from "./STNil";
 import { STBlock } from "./STBlock";
-import { strSurroundedBy, strSplitOnce, strFixedTrim } from "./utils/StringUtils";
+import { strSurroundedBy, strSplitOnce, strFixedTrim, strSplitWithTail } from "./utils/StringUtils";
 import { STString } from "./STString";
 import { LOG } from "./utils/Logger";
 
@@ -51,6 +51,9 @@ export class STScope {
 
 		} else if (this.isStringLiteral(trimmedExpression)) {
 			return this.getStringFetcher(trimmedExpression);
+
+		} else if (this.context.hasVariable(trimmedExpression)) {
+			return () => this.context.getVariable(trimmedExpression);
 
 		} else if (this.isAssignment(trimmedExpression)) {
 			return this.getAssignmentRunner(trimmedExpression);
@@ -158,11 +161,11 @@ export class STScope {
 	}
 
 	private getAssignmentRunner(expression: string): () => STNil {
-		let splittedExpression: string[] = strSplitOnce(expression, / ?:= ?/);
+		let splittedExpression: string[] = strSplitWithTail(expression, ":=", 2).map(str => str.trim());
 
 		return () => {
-			let assignedObject = this.evaluateExpression(expression[1]);
-			this.context.setVariable(expression[0], assignedObject);
+			let assignedObject = this.evaluateExpression(splittedExpression[1]);
+			this.context.setVariable(splittedExpression[0], assignedObject);
 			return new STNil("STScope.getAssignmentRunner(...)");
 		};
 	}

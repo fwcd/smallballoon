@@ -11,6 +11,23 @@ export function strFixedTrim(str: string, charCount: number) {
 }
 
 /**
+ * Splits the string a fixed number of times
+ * and puts the rest into the array.
+ * 
+ * @param str - The string to be used
+ * @param splitCount - The amount of splits
+ */
+export function strSplitWithTail(str: string, delimiter: string, splitCount: number): string[] {
+	let parts: string[] = str.split(delimiter);
+	let tail: string = parts.slice(splitCount).join(delimiter);
+	let result: string[] = parts.slice(0, splitCount);
+	if (tail.length > 0) {
+		result.push(tail);
+	}
+	return result;
+}
+
+/**
  * Splits the string at the first occurence of
  * the delimiter and returns a two-element
  * array containing the first part and the rest
@@ -19,9 +36,8 @@ export function strFixedTrim(str: string, charCount: number) {
  * @param str - The string to be used
  * @param delimiter - The delimiter around which the string will be split
  */
-export function strSplitOnce(str: string, delimiter: string | RegExp): string[] {
-	let first = str.split(delimiter, 1)[0];
-	return [first, str.slice(first.length, str.length)];
+export function strSplitOnce(str: string, delimiter: string): string[] {
+	return strSplitWithTail(str, delimiter, 1);
 }
 
 /**
