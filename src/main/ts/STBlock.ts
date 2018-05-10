@@ -1,6 +1,6 @@
 import { STObject } from "./STObject";
 import { STMessage } from "./STMessage";
-import { STScope } from "./STScope";
+import { STScope } from "./parse/STScope";
 import { STNil } from "./STNil";
 
 /**

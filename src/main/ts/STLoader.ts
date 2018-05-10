@@ -1,5 +1,5 @@
 import * as fs from "fs";
-import { STScope } from "./STScope";
+import { STScope } from "./parse/STScope";
 import { LOG } from "./utils/Logger";
 
 /**

@@ -1,6 +1,6 @@
 a := "Test".
 b := (6 times:2).
-c := b plus:3.
+c := b divide:3.
 
 Transscript show:a.
-Transscript show:(c divide:2).
+Transscript show:((3 plus:b) divide:(10 minus:c)).

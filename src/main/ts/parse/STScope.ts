@@ -1,20 +1,20 @@
-import { STParseException } from "./utils/STParseException";
-import { STContext } from "./STContext";
-import { STObject } from "./STObject";
-import { STMessage, STMessageParameter } from "./STMessage";
-import { STNil } from "./STNil";
-import { STBlock } from "./STBlock";
-import { strSurroundedBy, strSplitOnce, strFixedTrim, strSplitWithTail, strSurroundedByBrackets } from "./utils/StringUtils";
-import { STString } from "./STString";
-import { LOG } from "./utils/Logger";
-import { STNumber } from "./STNumber";
+import { STParseException } from "../utils/STParseException";
+import { STContext } from "../STContext";
+import { STObject } from "../STObject";
+import { STMessage, STMessageParameter } from "../STMessage";
+import { STNil } from "../STNil";
+import { STBlock } from "../STBlock";
+import { strSurroundedBy, strSplitAt, strSplitOnce, strFixedTrim, strSplitWithTail, strSurroundedByBrackets } from "../utils/StringUtils";
+import { STString } from "../STString";
+import { LOG } from "../utils/Logger";
+import { STNumber } from "../STNumber";
 
 /**
  * Represents a Smalltalk scope containing
  * expressions and variables.
- * 
+ *
  * Inteprets, parses and runs Smalltalk code
- * under the hood. 
+ * under the hood.
  */
 export class STScope {
 	private expressions: string[];
@@ -40,7 +40,7 @@ export class STScope {
 
 	private getExpressionEvaluator(expression: string): () => STObject {
 		let trimmedExpression = expression.trim();
-		
+
 		if (trimmedExpression.length === 0) {
 			return () => new STNil("STScope.getExpressionEvaluator(...)");
 
@@ -62,20 +62,31 @@ export class STScope {
 		} else if (this.isAssignment(trimmedExpression)) {
 			return this.getAssignmentRunner(trimmedExpression);
 
-		} else if (this.isMessage(trimmedExpression)) {
+		} else { // Assume a message
 			return this.getMessageRunner(trimmedExpression);
-
-		} else {
-			throw new STParseException("Could not identify expression: " + expression);
 		}
 	}
 
 	private getMessageRunner(expression: string): () => STObject {
-		let splittedExpression = strSplitOnce(expression, " ");
+		// Parse receiver using a bracket stack
+		let stackHeight = 0;
+		let i = 0;
+		let c: string;
+		do {
+			c = expression.charAt(i);
+			if (c === "(") {
+				stackHeight++;
+			} else if (c === ")") {
+				stackHeight--;
+			}
+			i++;
+		} while (stackHeight > 0 || c !== " ");
+
+		let splittedMessage: string[] = strSplitAt(expression, i);
 
 		return () => {
-			let receiver: STObject = this.evaluateExpression(splittedExpression[0]);
-			return receiver.receiveMessage(this.parseMessage(receiver, splittedExpression[1]));
+			let receiver: STObject = this.evaluateExpression(splittedMessage[0]);
+			return receiver.receiveMessage(this.parseMessage(receiver, splittedMessage[1]));
 		};
 	}
 
@@ -89,7 +100,7 @@ export class STScope {
 		for (let i=0; i<trimmedParameters.length; i++) {
 			let c = trimmedParameters.charAt(i);
 
-			if (stackHeight == 0 && c == ":") {
+			if (stackHeight === 0 && c === ":") {
 				result.push(currentParameter);
 				currentParameter = "";
 			} else {
@@ -122,7 +133,7 @@ export class STScope {
 		let currentLabel: string = "";
 		let currentValue: STObject = new STNil("STScope.parseMessage(...)");
 		let nextLabel: string = shiftedSplit[0].trim();
-		
+
 		for (let i=1; i<shiftedSplit.length; i++) {
 			let current = shiftedSplit[i].trim();
 			let currentSplit = current.split(" ");
@@ -139,7 +150,7 @@ export class STScope {
 			}
 
 			currentValue = this.evaluateExpression(currentValueStr);
-			
+
 			parameters.push({
 				label: currentLabel,
 				value: currentValue
@@ -173,7 +184,7 @@ export class STScope {
 			return new STNil("STScope.getAssignmentRunner(...)");
 		};
 	}
-	
+
 	private isInParentheses(expression: string): boolean {
 		// Matches:
 		// (<Any Sequence>)
@@ -188,14 +199,6 @@ export class STScope {
 		// Matches:
 		// "<Any Sequence>"
 		return strSurroundedBy(expression, "\"", "\"");
-	}
-
-	private isMessage(expression: string): boolean {
-		// Matches:
-		// <Word> <Word>
-		// or:
-		// <Word> <Word>:<Any Sequence>
-		return /^\w+ \w+ ?($|:.*)/.test(expression);
 	}
 
 	private isAssignment(expression: string): boolean {
