@@ -2,6 +2,7 @@ import { STObject } from "./STObject";
 import { STNil } from "./STNil";
 import { STTransscript } from "./api/STTransscript";
 import { LOG } from "./utils/Logger";
+import { STClass } from "./STClass";
 
 /**
  * A context holding variables in a Smalltalk program.
@@ -11,6 +12,7 @@ export class STContext {
 
 	public constructor() {
 		this.variables["Transscript"] = new STTransscript();
+		this.variables["Object"] = new STClass("Object");
 	}
 
 	public hasVariable(name: string): boolean {
