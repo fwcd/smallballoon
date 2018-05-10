@@ -3,6 +3,7 @@ import { STNil } from "./STNil";
 import { STTransscript } from "./api/STTransscript";
 import { LOG } from "./utils/Logger";
 import { STClass } from "./STClass";
+import { STBoolean } from "./STBoolean";
 
 /**
  * A context holding variables in a Smalltalk program.
@@ -13,6 +14,8 @@ export class STContext {
 	public constructor() {
 		this.variables["Transscript"] = new STTransscript();
 		this.variables["Object"] = new STClass("Object");
+		this.variables["true"] = STBoolean.TRUE;
+		this.variables["false"] = STBoolean.FALSE;
 	}
 
 	public hasVariable(name: string): boolean {

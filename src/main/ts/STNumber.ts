@@ -9,19 +9,19 @@ import { STInvalidMessageException } from "./utils/STInvalidMessageException";
  * from Smalltalk code.
  */
 export class STNumber extends STMethodHolder {
-	readonly value: number;
+	public readonly value: number;
 
 	public constructor(value: number) {
 		super();
 		this.value = value;
 
-		this.addMethod("plus", (message) => this.combine(this.getFirstArgAsNumber(message), (a, b) => a + b));
-		this.addMethod("minus", (message) => this.combine(this.getFirstArgAsNumber(message), (a, b) => a - b));
-		this.addMethod("times", (message) => this.combine(this.getFirstArgAsNumber(message), (a, b) => a * b));
-		this.addMethod("divide", (message) => this.combine(this.getFirstArgAsNumber(message), (a, b) => a / b));
+		this.addMethod("plus:", (msg) => this.combine(this.firstArgAsNum(msg), (a, b) => a + b));
+		this.addMethod("minus:", (msg) => this.combine(this.firstArgAsNum(msg), (a, b) => a - b));
+		this.addMethod("times:", (msg) => this.combine(this.firstArgAsNum(msg), (a, b) => a * b));
+		this.addMethod("divide:", (msg) => this.combine(this.firstArgAsNum(msg), (a, b) => a / b));
 	}
 
-	private getFirstArgAsNumber(message: STMessage): STNumber {
+	private firstArgAsNum(message: STMessage): STNumber {
 		let arg = message.parameters[0].value;
 		if (arg instanceof STNumber) {
 			return arg;

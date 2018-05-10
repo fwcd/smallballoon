@@ -12,16 +12,16 @@ export class STClass extends STMethodHolder {
 	private fieldNames: string[];
 	private classMethods: { [selector: string] : () => STObject; } = {};
 	private instanceMethods: { [selector: string] : (STObject) => STObject; } = {};
-	readonly name: string;
+	public readonly name: string;
 
 	public constructor(name: string) {
 		super();
 		this.name = name;
 
 		this.addMethod("new", (message) => new STInstance(this));
-		this.addMethod("setMethod:to", (message) => new STNil(this)); // TODO
-		this.addMethod("setClassMethod:to", (message) => new STNil(this)); // TODO
-		this.addMethod("declareProperty", (message) => new STNil(this)); // TODO
+		this.addMethod("setMethod:to:", (message) => new STNil(this)); // TODO
+		this.addMethod("setClassMethod:to:", (message) => new STNil(this)); // TODO
+		this.addMethod("declareProperty:", (message) => new STNil(this)); // TODO
 	}
 
 	// Override

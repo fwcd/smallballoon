@@ -8,6 +8,7 @@ import { strSurroundedBy, strSplitAt, strSplitOnce, strFixedTrim, strSplitWithTa
 import { STString } from "../STString";
 import { LOG } from "../utils/Logger";
 import { STNumber } from "../STNumber";
+import { STBoolean } from "../STBoolean";
 
 /**
  * Represents a Smalltalk scope containing
@@ -129,6 +130,14 @@ export class STScope {
 	private parseMessage(receiver: STObject, rawParameters: string): STMessage {
 		let parameters: STMessageParameter[] = [];
 		let shiftedSplit = this.splitMessageParametersByColon(rawParameters);
+
+		if (shiftedSplit.length === 1) {
+			parameters.push({
+				label: shiftedSplit[0],
+				value: new STNil("STScope.parseMessage(...) - no argument value")
+			})
+			return new STMessage(receiver, parameters);
+		}
 
 		let currentLabel: string = "";
 		let currentValue: STObject = new STNil("STScope.parseMessage(...)");

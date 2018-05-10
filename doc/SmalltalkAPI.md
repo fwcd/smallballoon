@@ -6,6 +6,8 @@ This documentation documents the API of the Smalltalk implementation. Most of th
 | ---- | ---- |
 | Transscript | Transscript |
 | Object | Class |
+| true | Boolean |
+| false | Boolean |
 
 ## Classes
 
@@ -37,6 +39,9 @@ A floating-point number.
 | minus:Number -> Number | Performs subtraction |
 | times:Number -> Number | Performs multiplication |
 | divide:Number -> Number | Performs division |
+
+## Boolean
+A truth value that can either be true or false.
 
 ### Nil
 An object representing the absence of a value.

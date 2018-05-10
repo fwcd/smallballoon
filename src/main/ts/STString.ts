@@ -8,7 +8,7 @@ import { STMethodHolder } from "./STMethodHolder";
  * from Smalltalk code.
  */
 export class STString extends STMethodHolder {
-	readonly value: string;
+	public readonly value: string;
 
 	public constructor(value: string) {
 		super();

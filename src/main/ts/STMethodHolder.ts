@@ -2,7 +2,7 @@ import { STMessage } from "./STMessage";
 import { STObject } from "./STObject";
 import { STNil } from "./STNil";
 
-export type MessageHandler = (msg: STMessage) => STObject;
+export type MessageHandler = (message: STMessage) => STObject;
 
 /**
  * A convenience class to simplify message

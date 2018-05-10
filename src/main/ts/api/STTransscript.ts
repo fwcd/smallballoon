@@ -13,7 +13,7 @@ import { STMethodHolder } from "../STMethodHolder";
 export class STTransscript extends STMethodHolder {
 	public constructor() {
 		super();
-		this.addMethod("show", (message) => {
+		this.addMethod("show:", (message) => {
 			console.log(message.parameters[0].value.toString());
 			return new STNil(this);
 		});
