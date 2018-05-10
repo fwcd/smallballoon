@@ -7,14 +7,15 @@ import { LOG } from "./utils/Logger";
  * Responds with nil to every message by default.
  */
 export class STObject {
-	// Do not override this method
+	// Do not override this method!!
 	public receiveMessage(message: STMessage): STObject {
 		LOG.trace("{} received {}", this, message);
 		return this.handleMessage(message);
 	}
 
-	public handleMessage(message: STMessage): STObject {
-		return new STNil(this);
+	// Intended to be overriden by subclasses
+	protected handleMessage(message: STMessage): STObject {
+		return new STNil(this); // Does not handle messages by default
 	}
 
 	public getClassName(): string {

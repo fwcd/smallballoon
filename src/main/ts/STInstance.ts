@@ -15,11 +15,11 @@ export class STInstance extends STObject {
 
 	// Override
 	public getClassName(): string {
-		return this.stClass.name;
+		return "Instance<" + this.stClass.name + ">";
 	}
 
 	// Override
-	public handleMessage(message: STMessage): STObject {
+	protected handleMessage(message: STMessage): STObject {
 		return this.stClass.receiveInstanceMessage(this, message);
 	}
 }

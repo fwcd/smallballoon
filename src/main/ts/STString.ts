@@ -1,23 +1,18 @@
 import { STObject } from "./STObject";
 import { STMessage } from "./STMessage";
 import { STNil } from "./STNil";
+import { STMethodHolder } from "./STMethodHolder";
 
 /**
  * A wrapper-class to access and manipulate strings
  * from Smalltalk code.
  */
-export class STString extends STObject {
+export class STString extends STMethodHolder {
 	readonly value: string;
 
 	public constructor(value: string) {
 		super();
 		this.value = value;
-	}
-
-	// Override
-	public handleMessage(message: STMessage): STObject {
-		// TODO: More functionality
-		return new STNil(this);
 	}
 
 	// Override
