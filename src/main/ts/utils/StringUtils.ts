@@ -2,7 +2,7 @@
  * Returns a centered subsequence of
  * the string by cutting of a specified amount
  * of leading and trailing characters.
- * 
+ *
  * @param str - The string to be used
  * @param charCount - The amount of character to be cut off on each end
  */
@@ -13,7 +13,7 @@ export function strFixedTrim(str: string, charCount: number) {
 /**
  * Splits the string a fixed number of times
  * and puts the rest into the array.
- * 
+ *
  * @param str - The string to be used
  * @param splitCount - The amount of splits
  */
@@ -32,7 +32,7 @@ export function strSplitWithTail(str: string, delimiter: string, splitCount: num
  * the delimiter and returns a two-element
  * array containing the first part and the rest
  * of the string.
- * 
+ *
  * @param str - The string to be used
  * @param delimiter - The delimiter around which the string will be split
  */
@@ -43,7 +43,7 @@ export function strSplitOnce(str: string, delimiter: string): string[] {
 /**
  * Checks whether a string starts with a string
  * and ends with another string.
- * 
+ *
  * @param str - The string to be tested
  * @param prefix - The start of a matching string
  * @param postfix - The end of a matching string
@@ -58,7 +58,7 @@ export function strSurroundedBy(str: string, prefix: string, postfix: string): b
  * Uses stack parsing with nested brackets to determine whether
  * there provided brackets actually enclose the
  * entire content.
- * 
+ *
  * @param str - The string to be tested
  * @param openingBracket - The opening bracket character
  * @param closingBracket - The closing bracket character
@@ -90,10 +90,14 @@ export function strSurroundedByBrackets(str: string, openingBracket: string, clo
 /**
  * Checks whether a string contains another string.
  * Mainly used to improve readability.
- * 
+ *
  * @param str - The string to be tested
  * @param substring - A subsequence of a matching string
  */
 export function strContains(str: string, substring: string): boolean {
 	return str.indexOf(substring) !== -1;
+}
+
+export function strSplitAt(str: string, index: number): string[] {
+	return [str.substring(0, index), str.substring(index)];
 }
