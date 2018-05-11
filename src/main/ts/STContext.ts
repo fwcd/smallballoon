@@ -10,12 +10,19 @@ import { STBoolean } from "./STBoolean";
  */
 export class STContext {
 	private variables: { [name: string] : STObject; } = {};
+	private delegate: STContext = null;
 
 	public constructor() {
 		this.variables["Transscript"] = new STTransscript();
 		this.variables["Object"] = new STClass("Object");
 		this.variables["true"] = STBoolean.TRUE;
 		this.variables["false"] = STBoolean.FALSE;
+	}
+
+	public asDelegate(): STContext {
+		let result = new STContext();
+		result.delegate = this;
+		return result;
 	}
 
 	public hasVariable(name: string): boolean {

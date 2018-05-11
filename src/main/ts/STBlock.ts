@@ -1,7 +1,7 @@
+import { STMessage, STMessageParameter } from "./STMessage";
 import { STObject } from "./STObject";
-import { STMessage } from "./STMessage";
-import { STScope } from "./parse/STScope";
-import { STNil } from "./STNil";
+
+export type STBlockEvaluator = (parameters: STMessageParameter[]) => STObject;
 
 /**
  * A block of Smalltalk code that can be
@@ -11,16 +11,20 @@ import { STNil } from "./STNil";
  * languages.
  */
 export class STBlock extends STObject {
-	private scope: STScope;
+	private evaluator: STBlockEvaluator;
 
-	// TODO: Support parameters and returns
-
-	public constructor(scope: STScope) {
+	public constructor(evaluator: STBlockEvaluator) {
 		super();
-		this.scope = scope;
+		this.evaluator = evaluator;
+	}
 
-		// TODO: Accept messages with selector "value"
-		// and evaluate expression then.
+	// Override
+	public handleMessage(message: STMessage): STObject {
+		if (message.getName() === "value") {
+			return this.evaluator([]);
+		} else {
+			return this.evaluator(message.parameters);
+		}
 	}
 
 	// Override
