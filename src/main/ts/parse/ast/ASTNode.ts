@@ -17,6 +17,16 @@ export class ExpressionListNode implements ASTNode {
 		this.expressions.forEach(exp => exp.evaluate(context));
 		return new STNil("ExpressionListNode.evaluate(...)");
 	}
+
+	public toString(): string {
+		let indent = "\n  ";
+		return "List ["
+				+ indent
+				+ this.expressions
+					.map((node) => node.toString())
+					.reduceRight((prev, current) => current + indent + prev)
+				+ "\n]";
+	}
 }
 
 export class BlockNode implements ASTNode {
@@ -42,6 +52,10 @@ export class BlockNode implements ASTNode {
 			return this.value.evaluate(subContext);
 		});
 	}
+
+	public toString(): string {
+		return "Block [" + this.parameters + "|" + this.value + "]";
+	}
 }
 
 export class LiteralNode implements ASTNode {
@@ -54,6 +68,10 @@ export class LiteralNode implements ASTNode {
 	public evaluate(context: STContext): STObject {
 		return this.value;
 	}
+
+	public toString(): string {
+		return this.value.toString();
+	}
 }
 
 export class VariableNode implements ASTNode {
@@ -65,6 +83,10 @@ export class VariableNode implements ASTNode {
 
 	public evaluate(context: STContext): STObject {
 		return context.getVariable(this.variableName);
+	}
+
+	public toString(): string {
+		return "Variable <" + this.variableName + ">";
 	}
 }
 
@@ -94,6 +116,10 @@ export class MessageNode implements ASTNode {
 
 		return receiver.receiveMessage(new STMessage(receiver, parameters));
 	}
+
+	public toString(): string {
+		return "Message [" + this.receiver + " receives {" + this.labels + "} - {" + this.values + "}]";
+	}
 }
 
 export class AssignmentNode implements ASTNode {
@@ -110,6 +136,10 @@ export class AssignmentNode implements ASTNode {
 		context.setVariable(this.variable, evaluatedValue);
 		return evaluatedValue;
 	}
+
+	public toString(): string {
+		return "Assignment [" + this.variable + " := " + this.value + "]";
+	}
 }
 
 export class NilNode implements ASTNode {
@@ -121,5 +151,9 @@ export class NilNode implements ASTNode {
 
 	public evaluate(context: STContext): STObject {
 		return this.value;
+	}
+
+	public toString(): string {
+		return "Nil (" + this.value + ")";
 	}
 }

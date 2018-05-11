@@ -16,4 +16,8 @@ export class AbstractSyntaxTree {
 	public run(): STObject {
 		return this.runWith(new STContext());
 	}
+
+	public toString(): string {
+		return this.root.toString();
+	}
 }

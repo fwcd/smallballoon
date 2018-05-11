@@ -1,5 +1,4 @@
 import * as fs from "fs";
-import { STScope } from "./parse/STScope";
 import { LOG } from "./utils/Logger";
 import { AbstractSyntaxTree } from "./parse/ast/AbstractSyntaxTree";
 import { STParser } from "./parse/STParser";
@@ -14,7 +13,9 @@ export class STLoader {
 	}
 
 	public runSTCode(rawCode: string): void {
-		this.createAST(rawCode).run();
+		let ast = this.createAST(rawCode);
+		LOG.trace("Running AST: {}", ast);
+		ast.run();
 	}
 
 	public createASTFromFile(fileName: string): AbstractSyntaxTree {

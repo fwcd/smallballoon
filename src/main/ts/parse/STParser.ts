@@ -1,17 +1,18 @@
 import { AbstractSyntaxTree } from "./ast/AbstractSyntaxTree";
-import { ASTNode, NilNode, LiteralNode, BlockNode, AssignmentNode, VariableNode, MessageNode } from "./ast/ASTNode";
+import { ASTNode, NilNode, LiteralNode, BlockNode, AssignmentNode, VariableNode, MessageNode, ExpressionListNode } from "./ast/ASTNode";
 import { STNumber } from "../STNumber";
 import { strSurroundedByBrackets, strSurroundedBy, strFixedTrim, strSplitWithTail, strSplitAt } from "../utils/StringUtils";
 import { STBlock } from "../STBlock";
 import { STString } from "../STString";
 import { STParseException } from "../utils/STParseException";
+import { LOG } from "../utils/Logger";
 
 export class STParser {
 	private ast: AbstractSyntaxTree;
 
 	public constructor(rawCode: string) {
 		let formattedCode: string = rawCode.replace(/(\r\n|\n|\r)/gm, ""); // Remove line breaks
-		this.ast = new AbstractSyntaxTree(this.parse(formattedCode));
+		this.ast = new AbstractSyntaxTree(this.parseSequence(formattedCode));
 	}
 
 	private parse(raw: string): ASTNode {
@@ -21,24 +22,31 @@ export class STParser {
 			return new NilNode("STParser.parse(" + trimmed + ")");
 
 		} else if (this.isInParentheses(trimmed)) {
+			LOG.trace("Parsing group: {}", raw);
 			return this.getUnwrappedNode(trimmed);
 
 		} else if (this.isBlock(trimmed)) {
+			LOG.trace("Parsing block: {}", raw);
 			return this.getBlockNode(trimmed);
 
 		} else if (this.isStringLiteral(trimmed)) {
+			LOG.trace("Parsing string literal: {}", raw);
 			return this.getStringNode(trimmed);
 
 		} else if (this.isNumberLiteral(trimmed)) {
+			LOG.trace("Parsing number literal: {}", raw);
 			return new LiteralNode(new STNumber(+raw));
 
 		} else if (this.isAssignment(trimmed)) {
+			LOG.trace("Parsing assignment: {}", raw);
 			return this.getAssignmentNode(trimmed);
 
 		} else if (this.isVariable(trimmed)) {
+			LOG.trace("Parsing variable: {}", raw);
 			return new VariableNode(trimmed);
 
 		} else { // Assume a message
+			LOG.trace("Parsing message: {}", raw);
 			return this.getMessageNode(trimmed);
 		}
 	}
@@ -47,10 +55,18 @@ export class STParser {
 		return this.ast;
 	}
 
+	private isOpeningBracket(character: string): boolean {
+		return character === "(" || character === "[";
+	}
+
+	private isClosingBracket(character: string): boolean {
+		return character === ")" || character === "]";
+	}
+
 	private isVariable(expression: string): boolean {
 		// Matches:
-		// <Sequence of word characters>
-		return /\w+/.test(expression);
+		// <Letter><Sequence of letters/numbers>
+		return /^[a-zA-Z][a-zA-Z0-9]*$/.test(expression);
 	}
 
 	private isInParentheses(expression: string): boolean {
@@ -116,7 +132,7 @@ export class STParser {
 			} while (c !== "|");
 		}
 
-		let node = new BlockNode(this.parse(expression.substring(i)), parameters);
+		let node = new BlockNode(this.parseSequence(expression.substring(i)), parameters);
 		return node;
 	}
 
@@ -125,7 +141,37 @@ export class STParser {
 		return new AssignmentNode(splittedExpression[0], this.parse(splittedExpression[1]));
 	}
 
-	// ==== TODO: ====
+	private parseSequence(raw: string): ASTNode {
+		let node = new ExpressionListNode();
+		let stackHeight = 0;
+		let current = "";
+		let self = this;
+
+		function pushCurrent(): void {
+			if (current.length > 0) {
+				node.expressions.push(self.parse(current));
+			}
+		}
+
+		for (let i=0; i<raw.length; i++) {
+			let c = raw.charAt(i);
+
+			if (this.isOpeningBracket(c)) {
+				stackHeight++;
+			} else if (this.isClosingBracket(c)) {
+				stackHeight--;
+			} else if (c === ".") {
+				pushCurrent();
+				current = "";
+			} else {
+				current += c;
+			}
+		}
+
+		pushCurrent();
+
+		return node;
+	}
 
 	private getMessageNode(expression: string): ASTNode {
 		// Parse receiver using a bracket stack
@@ -134,9 +180,9 @@ export class STParser {
 		let c: string;
 		do {
 			c = expression.charAt(i);
-			if (c === "(") {
+			if (this.isOpeningBracket(c)) {
 				stackHeight++;
-			} else if (c === ")") {
+			} else if (this.isClosingBracket(c)) {
 				stackHeight--;
 			}
 			i++;
@@ -164,9 +210,9 @@ export class STParser {
 			} else {
 				currentParameter += c;
 
-				if (c === "[" || c === "(") {
+				if (this.isOpeningBracket(c)) {
 					stackHeight++;
-				} else if (c === "]" || c === ")") {
+				} else if (this.isClosingBracket(c)) {
 					stackHeight--;
 				}
 
