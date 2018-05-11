@@ -21,7 +21,6 @@ export class STClass extends STMethodHolder {
 		this.addMethod("new", (message) => new STInstance(this));
 		this.addMethod("setMethod:to:", (message) => new STNil(this)); // TODO
 		this.addMethod("setClassMethod:to:", (message) => new STNil(this)); // TODO
-		this.addMethod("declareProperty:", (message) => new STNil(this)); // TODO
 	}
 
 	// Override

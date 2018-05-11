@@ -1,7 +1,7 @@
 import { STMethodHolder } from "./STMethodHolder";
 import { STNil } from "./STNil";
 import { STMessage } from "./STMessage";
-import { STInvalidMessageException } from "./utils/STInvalidMessageException";
+import { STTypeException } from "./utils/STTypeException";
 
 /**
  * A wrapper-class to represent booleans in Smalltalk
@@ -24,16 +24,16 @@ export class STBoolean extends STMethodHolder {
 		this.addMethod("xor:", (msg) => this.combine(this.firstArgAsBool(msg), (a, b) => a != b)); // TODO
 	}
 
-	public static from(value: boolean) {
+	public static from(value: boolean): STBoolean {
 		return value ? STBoolean.TRUE : STBoolean.FALSE;
 	}
 
 	private firstArgAsBool(message: STMessage): STBoolean {
-		let arg = message.parameters[0].value;
+		let arg = message.getValue(0);
 		if (arg instanceof STBoolean) {
 			return arg;
 		} else {
-			throw new STInvalidMessageException("The first argument of " + message.toString() + " has to be a boolean!");
+			throw new STTypeException("The first argument of " + message.toString() + " has to be a boolean!");
 		}
 	}
 

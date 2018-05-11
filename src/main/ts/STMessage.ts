@@ -47,7 +47,15 @@ export class STMessage extends STObject {
 	 * Returns the first argument label.
 	 */
 	public getName(): string {
-		return this.parameters[0].label;
+		return this.getLabel(0);
+	}
+
+	public getLabel(index: number): string {
+		return this.parameters[index].label;
+	}
+
+	public getValue(index: number): STObject {
+		return this.parameters[index].value;
 	}
 
 	public getSelector(): STSelector {

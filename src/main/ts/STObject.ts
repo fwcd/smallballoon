@@ -1,6 +1,7 @@
 import { STMessage } from "./STMessage";
 import { STNil } from "./STNil";
 import { LOG } from "./utils/Logger";
+import { STTypeException } from "./utils/STTypeException";
 
 /**
  * A Smalltalk object that can receive messages.
@@ -20,6 +21,20 @@ export class STObject {
 
 	public getClassName(): string {
 		return "Object";
+	}
+
+	/**
+	 * Dynamically casts a Smalltalk object while
+	 * catching type errors at runtime.
+	 *
+	 * @param castedType - The resulting type
+	 */
+	public expect<T extends STObject>(castedType: { new(...args: any[]): T }): T {
+		if (this instanceof castedType) {
+			return this;
+		} else {
+			throw new STTypeException(this.getClassName() + " does not match " + castedType);
+		}
 	}
 
 	public isNil(): boolean {

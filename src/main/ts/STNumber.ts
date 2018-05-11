@@ -2,7 +2,7 @@ import { STMessage } from "./STMessage";
 import { STMethodHolder } from "./STMethodHolder";
 import { STNil } from "./STNil";
 import { STObject } from "./STObject";
-import { STInvalidMessageException } from "./utils/STInvalidMessageException";
+import { STTypeException } from "./utils/STTypeException";
 
 /**
  * A wrapper-class to access and manipulate numbers
@@ -22,11 +22,11 @@ export class STNumber extends STMethodHolder {
 	}
 
 	private firstArgAsNum(message: STMessage): STNumber {
-		let arg = message.parameters[0].value;
+		let arg = message.getValue(0);
 		if (arg instanceof STNumber) {
 			return arg;
 		} else {
-			throw new STInvalidMessageException("The first argument of " + message.toString() + " has to be a number!");
+			throw new STTypeException("The first argument of " + message.toString() + " has to be a number!");
 		}
 	}
 
