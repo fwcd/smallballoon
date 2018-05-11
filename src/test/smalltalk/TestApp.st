@@ -10,5 +10,5 @@ Transscript show:"=== Boolean testing ===".
 Transscript show:(true and:false).
 Transscript show:(true xor:false).
 Transscript show:((false not) ifTrue:[
-	Transscript show:"Boolean is true!".
+	Transscript show:true.
 ]).
