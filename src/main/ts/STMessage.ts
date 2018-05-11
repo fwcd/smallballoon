@@ -39,7 +39,7 @@ export class STMessage extends STObject {
 	// Override
 	public toString(): string {
 		return this.parameters
-				.map(param => param.label + ": " + param.value.toString())
+				.map(param => param.label + ":" + param.value.toString())
 				.reduceRight((previous, current) => current + " " + previous);
 	}
 

@@ -9,6 +9,7 @@ The project is still in a very early stage, so expect parts of it to lack functi
 
 ## Setup
 >`npm install -g typescript`
+>`npm install`
 
 ## Compile sources
 >`tsc` (Optionally enable the -w flag to automatically compile changes.)
