@@ -36,7 +36,7 @@ export class STClass extends STMethodHolder {
 
 	// Override
 	public getClassName(): string {
-		return "Class<" + name + ">";
+		return "Class<" + this.name + ">";
 	}
 
 	public receiveInstanceMessage(instance: STInstance, message: STMessage): STObject {

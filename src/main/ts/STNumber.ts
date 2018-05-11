@@ -36,7 +36,7 @@ export class STNumber extends STMethodHolder {
 
 	// Override
 	public toString(): string {
-		return this.value.toString();
+		return "" + this.value;
 	}
 
 	// Override

@@ -43,6 +43,6 @@ export class STBoolean extends STMethodHolder {
 
 	// Override
 	public toString(): string {
-		return this.value.toString();
+		return this.value ? "true" : "false";
 	}
 }
