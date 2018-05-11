@@ -1,7 +1,8 @@
 import * as fs from "fs";
 import { STScope } from "./parse/STScope";
 import { LOG } from "./utils/Logger";
-import { STParseTree } from "./parse/STParseTree";
+import { AbstractSyntaxTree } from "./parse/ast/AbstractSyntaxTree";
+import { STParser } from "./parse/STParser";
 
 /**
  * Smalltalk source code/file loader.
@@ -13,15 +14,15 @@ export class STLoader {
 	}
 
 	public runSTCode(rawCode: string): void {
-		new STScope(rawCode).run();
+		this.createAST(rawCode).run();
 	}
 
-	public createParseTreeFromFile(fileName: string): STParseTree {
-		return STParseTree.create(this.readFile(fileName));
+	public createASTFromFile(fileName: string): AbstractSyntaxTree {
+		return this.createAST(this.readFile(fileName));
 	}
 
-	public createParseTree(rawCode: string): STParseTree {
-		return STParseTree.create(rawCode);
+	public createAST(rawCode: string): AbstractSyntaxTree {
+		return new STParser(rawCode).getAST();
 	}
 
 	private readFile(fileName: string): string {

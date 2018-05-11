@@ -16,6 +16,8 @@ import { STBoolean } from "../STBoolean";
  *
  * Inteprets, parses and runs Smalltalk code
  * under the hood.
+ *
+ * @deprecated Use Parser instead.
  */
 export class STScope {
 	private expressions: string[];

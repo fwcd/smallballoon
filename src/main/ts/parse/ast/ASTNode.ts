@@ -20,11 +20,12 @@ export class ExpressionListNode implements ASTNode {
 }
 
 export class BlockNode implements ASTNode {
-	public readonly parameters: string[] = [];
+	public readonly parameters: string[];
 	public readonly value: ASTNode;
 
-	public constructor(value: ASTNode) {
+	public constructor(value: ASTNode, parameters: string[]) {
 		this.value = value;
+		this.parameters = parameters;
 	}
 
 	public evaluate(context: STContext): STObject {
@@ -68,7 +69,7 @@ export class VariableNode implements ASTNode {
 }
 
 export class MessageNode implements ASTNode {
-	private readonly receiver: ASTNode;
+	public readonly receiver: ASTNode;
 	public readonly labels: string[] = [];
 	public readonly values: ASTNode[] = [];
 
@@ -108,5 +109,17 @@ export class AssignmentNode implements ASTNode {
 		let evaluatedValue = this.value.evaluate(context);
 		context.setVariable(this.variable, evaluatedValue);
 		return evaluatedValue;
+	}
+}
+
+export class NilNode implements ASTNode {
+	private readonly value: STNil;
+
+	public constructor(origin: string | STObject) {
+		this.value = new STNil(origin);
+	}
+
+	public evaluate(context: STContext): STObject {
+		return this.value;
 	}
 }

@@ -8,4 +8,12 @@ export class AbstractSyntaxTree {
 	public constructor(root: ASTNode) {
 		this.root = root;
 	}
+
+	public runWith(context: STContext): STObject {
+		return this.root.evaluate(context);
+	}
+
+	public run(): STObject {
+		return this.runWith(new STContext());
+	}
 }

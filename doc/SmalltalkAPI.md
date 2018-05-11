@@ -4,7 +4,7 @@ This documentation documents the API of the Smalltalk implementation. Most of th
 ## Globals
 | Name | Type |
 | ---- | ---- |
-| Transscript | Transscript |
+| Transcript | Transcript |
 | Object | Class |
 | true | Boolean |
 | false | Boolean |
@@ -35,7 +35,7 @@ The meta-representation of an instance of a `Class`.
 
 Delegates other messages to registered instance methods in `Class`.
 
-### Transscript
+### Transcript
 The output console.
 
 | Method | Description |

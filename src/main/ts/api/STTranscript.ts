@@ -8,9 +8,9 @@ import { STMethodHolder } from "../STMethodHolder";
  *
  * Usually only one instance of this class will
  * be globally available to a Smalltalk application,
- * named "Transscript".
+ * named "Transcript".
  */
-export class STTransscript extends STMethodHolder {
+export class STTranscript extends STMethodHolder {
 	public constructor() {
 		super();
 		this.addMethod("show:", (message) => {
@@ -21,6 +21,6 @@ export class STTransscript extends STMethodHolder {
 
 	// Override
 	public getClassName(): string {
-		return "Transscript";
+		return "Transcript";
 	}
 }

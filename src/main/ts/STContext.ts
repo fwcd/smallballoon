@@ -1,6 +1,6 @@
 import { STObject } from "./STObject";
 import { STNil } from "./STNil";
-import { STTransscript } from "./api/STTransscript";
+import { STTranscript } from "./api/STTranscript";
 import { LOG } from "./utils/Logger";
 import { STClass } from "./STClass";
 import { STBoolean } from "./STBoolean";
@@ -13,7 +13,7 @@ export class STContext {
 	private delegate: STContext = null;
 
 	public constructor() {
-		this.variables["Transscript"] = new STTransscript();
+		this.variables["Transcript"] = new STTranscript();
 		this.variables["Object"] = new STClass("Object");
 		this.variables["true"] = STBoolean.TRUE;
 		this.variables["false"] = STBoolean.FALSE;
