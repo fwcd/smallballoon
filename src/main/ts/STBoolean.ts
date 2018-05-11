@@ -2,6 +2,7 @@ import { STMethodHolder } from "./STMethodHolder";
 import { STNil } from "./STNil";
 import { STMessage } from "./STMessage";
 import { STTypeException } from "./utils/STTypeException";
+import { STBlock } from "./STBlock";
 
 /**
  * A wrapper-class to represent booleans in Smalltalk
@@ -16,8 +17,37 @@ export class STBoolean extends STMethodHolder {
 		super();
 		this.value = value;
 
-		this.addMethod("ifTrue:", (msg) => new STNil(this)); // TODO
-		this.addMethod("ifFalse:", (msg) => new STNil(this)); // TODO
+		this.addMethod("ifTrue:", (msg) => {
+			if (this.value) { return msg.getValue(0).expect(STBlock).evaluate() }
+			return new STNil(this);
+		});
+		this.addMethod("ifFalse:", (msg) => {
+			if (!this.value) { return msg.getValue(0).expect(STBlock).evaluate(); }
+			return new STNil(this);
+		});
+		this.addMethod("ifTrue:ifFalse:", (msg) => {
+			if (this.value) {
+				return msg.getValue(0).expect(STBlock).evaluate();
+			} else {
+				return msg.getValue(1).expect(STBlock).evaluate();
+			}
+		});
+		this.addMethod("whileTrue:", (msg) => {
+			while (this.value) { msg.getValue(0).expect(STBlock).evaluate(); }
+			return new STNil(this);
+		});
+		this.addMethod("whileFalse:", (msg) => {
+			while (!this.value) { msg.getValue(0).expect(STBlock).evaluate(); }
+			return new STNil(this);
+		});
+		this.addMethod("do:whileTrue", (msg) => {
+			do { msg.getValue(0).expect(STBlock).evaluate(); } while (this.value);
+			return new STNil(this);
+		});
+		this.addMethod("do:whileFalse", (msg) => {
+			do { msg.getValue(0).expect(STBlock).evaluate(); } while (!this.value);
+			return new STNil(this);
+		});
 		this.addMethod("and:", (msg) => this.combine(this.firstArgAsBool(msg), (a, b) => a && b)); // TODO
 		this.addMethod("not", (msg) => STBoolean.from(!value)); // TODO
 		this.addMethod("or:", (msg) => this.combine(this.firstArgAsBool(msg), (a, b) => a || b)); // TODO

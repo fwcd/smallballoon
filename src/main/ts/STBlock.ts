@@ -21,10 +21,18 @@ export class STBlock extends STObject {
 	// Override
 	public handleMessage(message: STMessage): STObject {
 		if (message.getName() === "value") {
-			return this.evaluator([]);
+			return this.evaluate();
 		} else {
-			return this.evaluator(message.parameters);
+			return this.evaluateWith(message.parameters);
 		}
+	}
+
+	public evaluateWith(parameters: STMessageParameter[]): STObject {
+		return this.evaluator(parameters);
+	}
+
+	public evaluate(): STObject {
+		return this.evaluator([]);
 	}
 
 	// Override

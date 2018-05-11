@@ -12,6 +12,7 @@ export class STParser {
 
 	public constructor(rawCode: string) {
 		let formattedCode: string = rawCode.replace(/(\r\n|\n|\r)/gm, ""); // Remove line breaks
+		LOG.deepTrace("Creating AST from: {}", formattedCode);
 		this.ast = new AbstractSyntaxTree(this.parseSequence(formattedCode));
 	}
 
@@ -107,18 +108,18 @@ export class STParser {
 
 	private getBlockNode(expression: string): BlockNode {
 		// Remove the leading and trailing square brackets
-		let contents = strFixedTrim(expression, 1);
+		let contents = strFixedTrim(expression.trim(), 1);
 		let parameters: string[] = [];
 		let i = 0;
 
-		if (expression.charAt(0) === ":") {
+		if (contents.charAt(0) === ":") {
 			// Parse parameters
 			i = 1;
 			let c: string;
 			let currentParameter = "";
 
 			do {
-				c = expression.charAt(i);
+				c = contents.charAt(i);
 
 				if (c === " " || c === "|") {
 					if (currentParameter.length > 0) {
@@ -132,7 +133,7 @@ export class STParser {
 			} while (c !== "|");
 		}
 
-		let node = new BlockNode(this.parseSequence(expression.substring(i)), parameters);
+		let node = new BlockNode(this.parseSequence(contents.substring(i)), parameters);
 		return node;
 	}
 
@@ -156,15 +157,17 @@ export class STParser {
 		for (let i=0; i<raw.length; i++) {
 			let c = raw.charAt(i);
 
-			if (this.isOpeningBracket(c)) {
-				stackHeight++;
-			} else if (this.isClosingBracket(c)) {
-				stackHeight--;
-			} else if (c === ".") {
+			if (c === "." && stackHeight === 0) {
 				pushCurrent();
 				current = "";
 			} else {
 				current += c;
+
+				if (this.isOpeningBracket(c)) {
+					stackHeight++;
+				} else if (this.isClosingBracket(c)) {
+					stackHeight--;
+				}
 			}
 		}
 
@@ -204,29 +207,33 @@ export class STParser {
 		for (let i=0; i<trimmedParameters.length; i++) {
 			let c = trimmedParameters.charAt(i);
 
-			if (stackHeight === 0 && c === ":") {
+			if (c === ":" && stackHeight === 0) {
 				result.push(currentParameter);
 				currentParameter = "";
 			} else {
 				currentParameter += c;
 
 				if (this.isOpeningBracket(c)) {
+					LOG.deepTrace("Opening {} in {}", c, rawParameters);
 					stackHeight++;
 				} else if (this.isClosingBracket(c)) {
+					LOG.deepTrace("Closing {} in {}", c, rawParameters);
 					stackHeight--;
 				}
+			}
 
-				if (stackHeight < 0) {
-					throw new STParseException("Inconsistent brackets in message parameters: " + rawParameters);
-				}
+			if (stackHeight < 0) {
+				throw new STParseException("Inconsistent brackets in message parameters: " + rawParameters);
 			}
 		}
+
 		result.push(currentParameter);
 
 		if (stackHeight != 0) {
 			throw new STParseException("Inconsistent brackets in message parameters: " + rawParameters);
 		}
 
+		LOG.deepTrace("Shifted message split: {}", result);
 		return result;
 	}
 

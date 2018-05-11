@@ -20,7 +20,7 @@ export class ExpressionListNode implements ASTNode {
 
 	public toString(): string {
 		let indent = "\n  ";
-		return "List ["
+		return "Expressions ["
 				+ indent
 				+ this.expressions
 					.map((node) => node.toString())
@@ -70,7 +70,15 @@ export class LiteralNode implements ASTNode {
 	}
 
 	public toString(): string {
-		return this.value.toString();
+		let prefix = "";
+		let postfix = "";
+
+		if (this.value instanceof STString) {
+			prefix = "\"";
+			postfix = "\"";
+		}
+
+		return prefix + this.value.toString() + postfix;
 	}
 }
 
@@ -118,7 +126,13 @@ export class MessageNode implements ASTNode {
 	}
 
 	public toString(): string {
-		return "Message [" + this.receiver + " receives {" + this.labels + "} - {" + this.values + "}]";
+		let parametersStr = "";
+
+		for (let i=0; i<this.labels.length; i++) {
+			parametersStr += this.labels[i] + ":(" + this.values[i] + ") ";
+		}
+
+		return "Message [" + this.receiver + " receives { " + parametersStr + "}]";
 	}
 }
 
@@ -154,6 +168,6 @@ export class NilNode implements ASTNode {
 	}
 
 	public toString(): string {
-		return "Nil (" + this.value + ")";
+		return this.value.toString();
 	}
 }
