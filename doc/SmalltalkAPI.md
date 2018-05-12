@@ -85,4 +85,14 @@ An object representing the absence of a value. Equivalent to "null" or "void" in
 Holds an piece of information that is used to call a method.
 
 ### Block
-Encapsulates Smalltalk code that can be dynamically called.
+Encapsulates Smalltalk code that can be dynamically called. The last statement in a block is returned.
+
+| Method | Description |
+| ------ | ----------- |
+| value -> Object | Evaluates this block |
+| whileTrue:Block -> Nil | Runs the given block as long as this block evaluates to true |
+| whileFalse:Block -> Nil | Runs the given block as long as this block evaluates to false (before performing an iteration) |
+| doWhileTrue:Block -> Nil | Runs the given block as long as this block evaluates to true (after performing an iteration) |
+| doWhileFalse:Block -> Nil | Runs the given block as long as this block evaluates to false (after performing an iteration) |
+
+Otherwise a message is interpreted as an evaluation using only the block parameters as argument labels.

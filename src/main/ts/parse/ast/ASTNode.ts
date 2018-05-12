@@ -5,6 +5,7 @@ import { STBlock, STBlockEvaluator } from "../../STBlock";
 import { STString } from "../../STString";
 import { STParseException } from "../../utils/STParseException";
 import { STMessageParameter, STMessage } from "../../STMessage";
+import { LOG } from "../../utils/Logger";
 
 export interface ASTNode {
 	evaluate(context: STContext): STObject;
@@ -14,8 +15,11 @@ export class ExpressionListNode implements ASTNode {
 	public readonly expressions: ASTNode[] = [];
 
 	public evaluate(context: STContext): STObject {
-		this.expressions.forEach(exp => exp.evaluate(context));
-		return new STNil("ExpressionListNode.evaluate(...)");
+		let lastEvaluation: STObject = new STNil("ExpressionListNode.evaluate(...)");
+		this.expressions.forEach(exp => {
+			lastEvaluation = exp.evaluate(context);
+		});
+		return lastEvaluation;
 	}
 
 	public toString(): string {
@@ -122,6 +126,7 @@ export class MessageNode implements ASTNode {
 			});
 		}
 
+		LOG.deepTrace("Receiver {} evaluates to {}", this.receiver, receiver);
 		return receiver.receiveMessage(new STMessage(receiver, parameters));
 	}
 

@@ -13,7 +13,7 @@ export class STBoolean extends STMethodHolder {
 	public static readonly FALSE = new STBoolean(false);
 	public readonly value: boolean;
 
-	private constructor(value: boolean) {
+	public constructor(value: boolean) {
 		super();
 		this.value = value;
 
@@ -32,22 +32,6 @@ export class STBoolean extends STMethodHolder {
 				return msg.getValue(1).expect(STBlock).evaluate();
 			}
 		});
-		// this.addMethod("whileTrue:", (msg) => {
-		// 	while (this.value) { msg.getValue(0).expect(STBlock).evaluate(); }
-		// 	return new STNil(this);
-		// });
-		// this.addMethod("whileFalse:", (msg) => {
-		// 	while (!this.value) { msg.getValue(0).expect(STBlock).evaluate(); }
-		// 	return new STNil(this);
-		// });
-		// this.addMethod("do:whileTrue", (msg) => {
-		// 	do { msg.getValue(0).expect(STBlock).evaluate(); } while (this.value);
-		// 	return new STNil(this);
-		// });
-		// this.addMethod("do:whileFalse", (msg) => {
-		// 	do { msg.getValue(0).expect(STBlock).evaluate(); } while (!this.value);
-		// 	return new STNil(this);
-		// });
 		this.addMethod("and:", (msg) => this.combine(this.firstArgAsBool(msg), (a, b) => a && b)); // TODO
 		this.addMethod("not", (msg) => STBoolean.from(!value)); // TODO
 		this.addMethod("or:", (msg) => this.combine(this.firstArgAsBool(msg), (a, b) => a || b)); // TODO

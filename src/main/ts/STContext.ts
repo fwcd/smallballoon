@@ -26,7 +26,7 @@ export class STContext {
 	}
 
 	public hasVariable(name: string): boolean {
-		return name in this.variables || (this.delegate !== null && name in this.delegate.variables);
+		return name in this.variables || (this.delegate !== null && this.delegate.hasVariable(name));
 	}
 
 	public setVariable(name: string, value: STObject): void {
@@ -39,9 +39,9 @@ export class STContext {
 	}
 
 	public getVariable(name: string): STObject {
-		if (this.hasVariable(name)) {
+		if (name in this.variables) {
 			return this.variables[name];
-		} else if (this.delegate !== null) {
+		} else if (this.delegate !== null && this.delegate.hasVariable(name)) {
 			return this.delegate.getVariable(name);
 		} else {
 			return new STNil("STContext.getVariable(...)");

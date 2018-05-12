@@ -16,7 +16,7 @@ Transcript show:((false not) ifTrue:[
 ]).
 
 i := 0.
-true whileTrue:[
+[i lessOrEqual:5] whileTrue:[
 	Transcript show:i.
 	i := i plus:1.
 ].
