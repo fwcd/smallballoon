@@ -1,13 +1,20 @@
 # Balloon
-A Smalltalk interpreter for TypeScript/NodeJS.
+A Smalltalk interpreter for JavaScript/TypeScript. A quick example:
 
-The project is still in a very early stage, so expect parts of it to lack functionality or not work at all.
+```smalltalk
+i := 0.
+[i lessOrEqual:5] whileTrue:[
+	Transcript show:i.
+	i := i plus:1.
+].
+```
 
 ## Dependencies
 * TypeScript 2.8.1 (development)
 * ES5 (target)
+* Node.js (only used to open files)
 
-## Setup
+## Setup using npm
 >`npm install -g typescript`
 
 >`npm install`
