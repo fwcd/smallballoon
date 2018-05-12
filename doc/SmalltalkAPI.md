@@ -63,7 +63,7 @@ A floating-point number.
 | greaterOrEqual:Number -> Boolean | Checks whether this number is greater than or equal to another |
 | lessThan:Number -> Boolean | Checks whether this number is less than another |
 | lessOrEqual:Number -> Boolean | Checks whether this number is less than or equal to another |
-| equal:Number -> Boolean | Checks whether this number is equal to another |
+| equals:Number -> Boolean | Checks whether this number is equal to another |
 
 ## Boolean
 A truth value that can either be true or false.
@@ -90,7 +90,7 @@ Encapsulates Smalltalk code that can be dynamically called. The last statement i
 | Method | Description |
 | ------ | ----------- |
 | value -> Object | Evaluates this block |
-| whileTrue:Block -> Nil | Runs the given block as long as this block evaluates to true |
+| whileTrue:Block -> Nil | Runs the given block as long as this block evaluates to true (before performing an iteration) |
 | whileFalse:Block -> Nil | Runs the given block as long as this block evaluates to false (before performing an iteration) |
 | doWhileTrue:Block -> Nil | Runs the given block as long as this block evaluates to true (after performing an iteration) |
 | doWhileFalse:Block -> Nil | Runs the given block as long as this block evaluates to false (after performing an iteration) |
