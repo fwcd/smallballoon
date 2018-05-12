@@ -3,6 +3,7 @@ import { STMethodHolder } from "./STMethodHolder";
 import { STNil } from "./STNil";
 import { STObject } from "./STObject";
 import { STTypeException } from "./utils/STTypeException";
+import { STBoolean } from "./STBoolean";
 
 /**
  * A wrapper-class to access and manipulate numbers
@@ -19,6 +20,11 @@ export class STNumber extends STMethodHolder {
 		this.addMethod("minus:", (msg) => this.combine(this.firstArgAsNum(msg), (a, b) => a - b));
 		this.addMethod("times:", (msg) => this.combine(this.firstArgAsNum(msg), (a, b) => a * b));
 		this.addMethod("divide:", (msg) => this.combine(this.firstArgAsNum(msg), (a, b) => a / b));
+		this.addMethod("greaterThan:", (msg) => STBoolean.from(this.value > this.firstArgAsNum(msg).value));
+		this.addMethod("greaterOrEqual:", (msg) => STBoolean.from(this.value >= this.firstArgAsNum(msg).value));
+		this.addMethod("lessThan:", (msg) => STBoolean.from(this.value < this.firstArgAsNum(msg).value));
+		this.addMethod("lessOrEqual:", (msg) => STBoolean.from(this.value <= this.firstArgAsNum(msg).value));
+		this.addMethod("equals:", (msg) => STBoolean.from(this.value === this.firstArgAsNum(msg).value));
 	}
 
 	private firstArgAsNum(message: STMessage): STNumber {

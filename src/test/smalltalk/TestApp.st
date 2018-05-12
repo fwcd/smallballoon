@@ -10,5 +10,13 @@ Transcript show:"=== Boolean testing ===".
 Transcript show:(true and:false).
 Transcript show:(true xor:false).
 Transcript show:((false not) ifTrue:[
-	Transcript show:true.
+	Transcript show:"Reached a true block".
+] ifFalse:[
+	Transcript show:"Reached a false block".
 ]).
+
+i := 0.
+true whileTrue:[
+	Transcript show:i.
+	i := i plus:1.
+].

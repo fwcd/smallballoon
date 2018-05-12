@@ -45,6 +45,11 @@ The output console.
 ### String
 A sequence of characters. Can only be created through literals currently.
 
+| Method | Description |
+| ------ | ----------- |
+| equals:String -> Boolean | Checks for equality (case-sensitive) |
+| toNumber -> Number | Converts this string to a number |
+
 ### Number
 A floating-point number.
 
@@ -54,9 +59,24 @@ A floating-point number.
 | minus:Number -> Number | Performs subtraction |
 | times:Number -> Number | Performs multiplication |
 | divide:Number -> Number | Performs division |
+| greaterThan:Number -> Boolean | Checks whether this number is greater than another |
+| greaterOrEqual:Number -> Boolean | Checks whether this number is greater than or equal to another |
+| lessThan:Number -> Boolean | Checks whether this number is less than another |
+| lessOrEqual:Number -> Boolean | Checks whether this number is less than or equal to another |
+| equal:Number -> Boolean | Checks whether this number is equal to another |
 
 ## Boolean
 A truth value that can either be true or false.
+
+| Method | Description |
+| ------ | ----------- |
+| and:Boolean -> Boolean | Performs logical AND |
+| not -> Boolean | Performs logical NOT |
+| or:Boolean -> Boolean | Performs logical OR |
+| xor:Boolean -> Boolean | Performs logical XOR |
+| ifTrue:Block -> Nil | Executes the block if this boolean is true |
+| ifFalse:Block -> Nil | Executes the block if this boolean is false |
+| ifTrue:Block ifFalse:Block -> Nil | Executes the first block if this boolean is true, otherwise execute the other block |
 
 ### Nil
 An object representing the absence of a value. Equivalent to "null" or "void" in other languages.

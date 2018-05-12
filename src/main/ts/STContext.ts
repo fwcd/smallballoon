@@ -26,17 +26,23 @@ export class STContext {
 	}
 
 	public hasVariable(name: string): boolean {
-		return name in this.variables;
+		return name in this.variables || (this.delegate !== null && name in this.delegate.variables);
 	}
 
 	public setVariable(name: string, value: STObject): void {
 		LOG.trace("{} now equals {}", name, value);
-		this.variables[name] = value;
+		if (this.delegate !== null && this.delegate.hasVariable(name)) {
+			this.delegate.setVariable(name, value);
+		} else {
+			this.variables[name] = value;
+		}
 	}
 
 	public getVariable(name: string): STObject {
 		if (this.hasVariable(name)) {
 			return this.variables[name];
+		} else if (this.delegate !== null) {
+			return this.delegate.getVariable(name);
 		} else {
 			return new STNil("STContext.getVariable(...)");
 		}
