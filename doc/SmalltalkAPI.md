@@ -9,6 +9,7 @@ This documentation documents the API of the Smalltalk implementation. Most of th
 | true | Boolean |
 | false | Boolean |
 | JS | JSRuntime |
+| Runtime | Runtime |
 
 ## Classes
 
@@ -105,7 +106,7 @@ An API class that allows Smalltalk to call JavaScript code.
 | ------ | ----------- |
 | run:String -> Object | Runs JavaScript code and returns the result as Object or Number if appropriate, otherwise as String |
 
-## Runtime
+### Runtime
 Provides access to runtime-related methods.
 
 | Method | Description |
