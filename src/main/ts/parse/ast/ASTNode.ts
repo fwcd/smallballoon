@@ -47,7 +47,8 @@ export class BlockNode implements ASTNode {
 			let subContext = context.asDelegate();
 			let parameterIndex = 0;
 			parameters.forEach(parameter => {
-				subContext.setVariable(parameter.label, parameter.value);
+				// TODO: Implement proper locals
+				subContext.setVariable(parameter.label, parameter.value, true);
 				if (parameter.label !== this.parameters[parameterIndex]) {
 					throw new STParseException("Provided parameter #" + parameterIndex + " " + parameter.label + " not declared in block!");
 				}
@@ -152,7 +153,8 @@ export class AssignmentNode implements ASTNode {
 
 	public evaluate(context: STContext): STObject {
 		let evaluatedValue = this.value.evaluate(context);
-		context.setVariable(this.variable, evaluatedValue);
+		// TODO: Implement proper local variables
+		context.setVariable(this.variable, evaluatedValue, true);
 		return evaluatedValue;
 	}
 

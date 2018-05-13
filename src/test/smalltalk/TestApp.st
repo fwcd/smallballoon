@@ -23,3 +23,8 @@ i := 0.
 
 Transcript show:"=== JS-bridge testing ===".
 JS run:"console.log('Hello JavaScript!')".
+
+Transcript show:"=== Import testing ===".
+Runtime import:"src/test/smalltalk/TestImport.st".
+Transcript show:someVariable.
+Transcript show:anotherVariable.

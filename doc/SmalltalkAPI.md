@@ -104,3 +104,10 @@ An API class that allows Smalltalk to call JavaScript code.
 | Method | Description |
 | ------ | ----------- |
 | run:String -> Object | Runs JavaScript code and returns the result as Object or Number if appropriate, otherwise as String |
+
+## Runtime
+Provides access to runtime-related methods.
+
+| Method | Description |
+| ------ | ----------- |
+| import:String -> Nil | Imports a Smalltalk file to the current context using a relative path |

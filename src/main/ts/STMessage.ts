@@ -31,6 +31,17 @@ export class STMessage extends STObject {
 		this.parameters = parameters;
 	}
 
+	public static from(receiver: STObject, args: [string, STObject][]): STMessage {
+		let parameters: STMessageParameter[] = [];
+		args.forEach(arg => {
+			parameters.push({
+				label: arg[0],
+				value: arg[1]
+			});
+		});
+		return new STMessage(receiver, parameters);
+	}
+
 	// Override
 	public getClassName(): string {
 		return "Message";
