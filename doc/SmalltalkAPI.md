@@ -8,6 +8,7 @@ This documentation documents the API of the Smalltalk implementation. Most of th
 | Object | Class |
 | true | Boolean |
 | false | Boolean |
+| JS | JSRuntime |
 
 ## Classes
 
@@ -96,3 +97,10 @@ Encapsulates Smalltalk code that can be dynamically called. The last statement i
 | doWhileFalse:Block -> Nil | Runs the given block as long as this block evaluates to false (after performing an iteration) |
 
 Otherwise a message is interpreted as an evaluation using only the block parameters as argument labels.
+
+### JSRuntime
+An API class that allows Smalltalk to call JavaScript code.
+
+| Method | Description |
+| ------ | ----------- |
+| run:String -> Object | Runs JavaScript code and returns the result as Object or Number if appropriate, otherwise as String |

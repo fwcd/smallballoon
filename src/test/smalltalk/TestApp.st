@@ -20,3 +20,6 @@ i := 0.
 	Transcript show:i.
 	i := i plus:1.
 ].
+
+Transcript show:"=== JS-bridge testing ===".
+JS run:"console.log('Hello JavaScript!')".

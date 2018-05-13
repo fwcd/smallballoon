@@ -9,6 +9,16 @@ i := 0.
 ].
 ```
 
+100% interoperable with JS:
+
+```smalltalk
+JS run:"console.log('Hello JavaScript!')".
+```
+
+```javascript
+new STLoader().runSTCode('Transcript show:"Hello Smalltalk!"');
+```
+
 ## Dependencies
 * TypeScript 2.8.1 (development)
 * ES5 (target)

@@ -4,6 +4,7 @@ import { STTranscript } from "./api/STTranscript";
 import { LOG } from "./utils/Logger";
 import { STClass } from "./STClass";
 import { STBoolean } from "./STBoolean";
+import { STJSRuntime } from "./api/STJSRuntime";
 
 /**
  * A context holding variables in a Smalltalk program.
@@ -17,6 +18,7 @@ export class STContext {
 		this.variables["Object"] = new STClass("Object");
 		this.variables["true"] = STBoolean.TRUE;
 		this.variables["false"] = STBoolean.FALSE;
+		this.variables["JS"] = new STJSRuntime();
 	}
 
 	public asDelegate(): STContext {

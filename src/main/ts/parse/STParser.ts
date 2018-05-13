@@ -147,6 +147,7 @@ export class STParser {
 		let stackHeight = 0;
 		let current = "";
 		let self = this;
+		let inString = false;
 
 		function pushCurrent(): void {
 			if (current.length > 0) {
@@ -157,13 +158,15 @@ export class STParser {
 		for (let i=0; i<raw.length; i++) {
 			let c = raw.charAt(i);
 
-			if (c === "." && stackHeight === 0) {
+			if (!inString && c === "." && stackHeight === 0) {
 				pushCurrent();
 				current = "";
 			} else {
 				current += c;
 
-				if (this.isOpeningBracket(c)) {
+				if (c === "\"") {
+					inString = !inString;
+				} else if (this.isOpeningBracket(c)) {
 					stackHeight++;
 				} else if (this.isClosingBracket(c)) {
 					stackHeight--;
