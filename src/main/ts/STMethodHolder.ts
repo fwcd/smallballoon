@@ -10,6 +10,7 @@ export type MessageHandler = (message: STMessage) => STObject;
  */
 export class STMethodHolder extends STObject {
 	private methods: { [selector: string] : MessageHandler; } = {};
+	private preMethodHandler: (msg: STMessage) => STObject = (msg => new STNil("Empty pre method handler"));
 	private postMethodHandler: (msg: STMessage) => STObject = (msg => new STNil("Empty post method handler"));
 	private delegate: STObject = new STNil("Empty STMethodHandler.delegate");
 
@@ -24,6 +25,11 @@ export class STMethodHolder extends STObject {
 	// Override
 	protected handleMessage(message: STMessage): STObject {
 		let selector: string = message.getSelector().value;
+
+		let preMethodHandlerResult = this.preMethodHandler(message);
+		if (!preMethodHandlerResult.isNil()) {
+			return preMethodHandlerResult;
+		}
 
 		for (let methodSelector in this.methods) {
 			if (selector === methodSelector) {
@@ -40,13 +46,26 @@ export class STMethodHolder extends STObject {
 			return this.delegate.receiveMessage(message);
 		}
 
-		this.receiveMessage(new STMessage(this, [{
-			label: "doesNotUnderstand",
-			value: message
-		}]));
-		// Control will never reach this point if
+		// TODO: Find proper way to enforce doesNotUnderstand checks without
+		// breaking void methods in dynamic classes.
+		// The previous solution (which does not work with Array.forEach in
+		// Smalltalk) is commented out below:
+
+		// this.receiveMessage(new STMessage(this, [{
+		// 	label: "doesNotUnderstand",
+		// 	value: message
+		// }]));
+		// Control would (if the above is not commented) never reach this point if
 		// "doesNotUnderstand:" is not overridden
-		return super.handleMessage(message);
+		// return super.handleMessage(message);
+
+		return new STNil(this);
+	}
+
+	protected setPreMethodHandler(handler: (msg: STMessage) => STObject) {
+		if (handler !== null && handler !== undefined) {
+			this.preMethodHandler = handler;
+		}
 	}
 
 	protected setPostMethodHandler(handler: (msg: STMessage) => STObject) {

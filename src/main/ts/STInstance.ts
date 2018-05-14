@@ -4,6 +4,7 @@ import { STMessage } from "./STMessage";
 import { STMethodHolder } from "./STMethodHolder";
 import { STString } from "./STString";
 import { STNil } from "./STNil";
+import { STEmpty } from "./STEmpty";
 
 /**
  * An instance of a Smalltalk class.
@@ -18,11 +19,11 @@ export class STInstance extends STMethodHolder {
 
 		this.addMethod("set:to:", (msg: STMessage) => {
 			this.properties[msg.getValue(0).expect(STString).value] = msg.getValue(1);
-			return new STNil(this);
+			return STEmpty.getInstance();
 		});
 		this.addMethod("get:", (msg: STMessage) => this.properties[msg.getValue(0).expect(STString).value]);
-		this.addMethod("toString", (msg) => new STString(this.toString()));
-		this.setPostMethodHandler((msg: STMessage) => this.stClass.receiveInstanceMessage(this, msg));
+		this.addMethod("asString", (msg) => new STString(this.toString()));
+		this.setPreMethodHandler((msg: STMessage) => this.stClass.receiveInstanceMessage(this, msg));
 	}
 
 	// Override
@@ -35,7 +36,7 @@ export class STInstance extends STMethodHolder {
 		let str = "Instance<" + this.stClass.getName() + "> {";
 
 		for (let propertyName in this.properties) {
-			str += propertyName + " = " + this.properties[propertyName] + ", ";
+			str += propertyName + " = " + this.properties[propertyName].toString() + ", ";
 		}
 
 		return str.substring(0, str.length - 2) + "}";

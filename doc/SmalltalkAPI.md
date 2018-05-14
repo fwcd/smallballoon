@@ -34,7 +34,7 @@ The meta-representation of an instance of a `Class`.
 | ------ | ----------- |
 | set:String to:Object -> Nil | Sets a property |
 | get:String -> Object | Fetches a property by name |
-| toString -> String | Converts this instance to a string |
+| asString -> String | Converts this instance to a string |
 
 Delegates other messages to registered instance methods in `Class`.
 
@@ -70,7 +70,7 @@ A floating-point number.
 | lessThan:Number -> Boolean | Checks whether this number is less than another |
 | lessOrEqual:Number -> Boolean | Checks whether this number is less than or equal to another |
 | equals:Number -> Boolean | Checks whether this number is equal to another |
-| toString -> String | Converts this number to a string |
+| asString -> String | Converts this number to a string |
 
 ## Boolean
 A truth value that can either be true or false.
@@ -118,6 +118,9 @@ A wrapper for a JavaScript object that is accessible from Smalltalk.
 | Method | Description |
 | ------ | ----------- |
 | toSTObject -> Object | Tries to convert the object to a Smalltalk representation (Object or Number, otherwise String) |
+| mapUsingJS:String -> Object | Interprets the parameter as JavaScript code with "this" representing this object and wraps the evaluated result in another JSObject |
+| subscriptGet:Object -> Object | Returns the wrapped JS object after calling the subscript operator using the given parameter |
+| subscriptSet:Object to:Object -> Nil | Associates the second argument with this object after calling the subscript operator using the first argument |
 
 Interprets other messages as method calls on this particular JS object. For example:
 

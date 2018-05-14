@@ -1,3 +1,7 @@
+Runtime import:"src/test/smalltalk/TestImport.st".
+Runtime import:"src/main/smalltalk/Array.st".
+Runtime import:"src/main/smalltalk/Vector2D.st".
+
 b := (6 times:2).
 c := b divide:3.
 
@@ -7,11 +11,11 @@ Transcript show:((3 plus:b) divide:(10 minus:c)).
 Transcript show:"=== Boolean testing ===".
 Transcript show:(true and:false).
 Transcript show:(true xor:false).
-Transcript show:((false not) ifTrue:[
+(false not) ifTrue:[
 	Transcript show:"Reached a true block".
 ] ifFalse:[
 	Transcript show:"Reached a false block".
-]).
+].
 
 Transcript show:"=== Block testing ===".
 i := 0.
@@ -23,9 +27,13 @@ i := 0.
 Transcript show:"=== JS-bridge testing ===".
 JS run:"console.log('Hello JavaScript!')".
 (JS get:"console") log:"Hello JSObject!".
+jsArray := JS get:"[]".
+jsArray push:4.
+jsArray push:20.
+jsArray push:3.
+Transcript show:(jsArray mapUsingJS:"this[1]").
 
 Transcript show:"=== Import testing ===".
-Runtime import:"src/test/smalltalk/TestImport.st".
 Transcript show:someVariable.
 Transcript show:anotherVariable.
 
@@ -43,9 +51,18 @@ Transcript show:("Global a: " and:a).
 Transcript show:("Global b: " and:b).
 
 Transcript show:"=== Dynamic classes testing ===".
-Runtime import:"src/main/smalltalk/Vector2D.st".
-
 vecA := Vector2D ofX:24 andY:12.
 vecB := Vector2D ofX:2 andY:3.
 vecC := vecA plus:vecB.
-Transcript show:(((vecC toString) and:" has the length ") and:(vecC length)).
+Transcript show:(((vecC asString) and:" has the length ") and:(vecC length)).
+
+Transcript show:"=== Array testing ===".
+testArray := Array create.
+testArray push:5.
+testArray push:23.
+testArray push:"test".
+Transcript show:testArray.
+Transcript show:("length: " and:(testArray length)).
+testArray forEach:[:each |
+	Transcript show:each.
+].

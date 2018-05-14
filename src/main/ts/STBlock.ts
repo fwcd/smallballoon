@@ -3,6 +3,7 @@ import { STObject } from "./STObject";
 import { STMethodHolder } from "./STMethodHolder";
 import { STBoolean } from "./STBoolean";
 import { STNil } from "./STNil";
+import { STEmpty } from "./STEmpty";
 
 export type STBlockEvaluator = (implicitParameters: STMessageParameter[], explicitParameters: STMessageParameter[]) => STObject;
 
@@ -53,7 +54,10 @@ export class STBlock extends STMethodHolder {
 			} while (!this.evaluate().expect(STBoolean).value);
 			return new STNil(this);
 		});
-		this.setPostMethodHandler((msg) => this.evaluateWith([], msg.parameters));
+		this.setPostMethodHandler((msg) => {
+			this.evaluateWith([], msg.parameters);
+			return STEmpty.getInstance();
+		});
 	}
 
 	public evaluateWith(implicitParameters: STMessageParameter[], explicitParameters: STMessageParameter[]): STObject {

@@ -28,15 +28,17 @@ export class STNumber extends STMethodHolder {
 		this.addMethod("lessThan:", (msg) => STBoolean.from(this.value < this.firstArgAsNum(msg).value));
 		this.addMethod("lessOrEqual:", (msg) => STBoolean.from(this.value <= this.firstArgAsNum(msg).value));
 		this.addMethod("equals:", (msg) => STBoolean.from(this.value === this.firstArgAsNum(msg).value));
-		this.addMethod("toString", (msg) => new STString("" + this.value));
+		this.addMethod("asString", (msg) => new STString("" + this.value));
 	}
 
 	private firstArgAsNum(message: STMessage): STNumber {
 		let arg = message.getValue(0);
 		if (arg instanceof STNumber) {
 			return arg;
+		} else if (!isNaN(+arg)) {
+			return new STNumber(<number><any>arg);
 		} else {
-			throw new STTypeException("The first argument of " + message.toString() + " has to be a number!");
+			throw new STTypeException("The first argument of " + message.toString() + " (" + arg + ") has to be a number, but was instead " + (typeof arg) + "!");
 		}
 	}
 

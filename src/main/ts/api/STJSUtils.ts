@@ -6,7 +6,7 @@ import { STTypeException } from "../utils/STTypeException";
 export function toSmalltalkObject(jsObject: any): STObject {
 	if (this.jsObject instanceof STObject) {
 		return this.jsObject;
-	} else if (typeof this.jsObject === "number") {
+	} else if (!isNaN(jsObject)) {
 		return new STNumber(this.jsObject);
 	} else {
 		return new STString(this.jsObject);
