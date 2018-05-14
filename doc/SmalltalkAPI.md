@@ -34,6 +34,7 @@ The meta-representation of an instance of a `Class`.
 | ------ | ----------- |
 | set:String to:Object -> Nil | Sets a property |
 | get:String -> Object | Fetches a property by name |
+| asString -> String | Converts this instance to a string |
 
 Delegates other messages to registered instance methods in `Class`.
 
@@ -67,6 +68,7 @@ A floating-point number.
 | lessThan:Number -> Boolean | Checks whether this number is less than another |
 | lessOrEqual:Number -> Boolean | Checks whether this number is less than or equal to another |
 | equals:Number -> Boolean | Checks whether this number is equal to another |
+| asString -> String | Converts this number to a string |
 
 ## Boolean
 A truth value that can either be true or false.

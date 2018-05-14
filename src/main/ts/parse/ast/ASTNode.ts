@@ -36,32 +36,38 @@ export class ExpressionListNode implements ASTNode {
 }
 
 export class BlockNode implements ASTNode {
-	public readonly parameters: string[];
+	public readonly implicitParameters: string[];
+	public readonly explicitParameters: string[];
 	public readonly value: ASTNode;
 
-	public constructor(value: ASTNode, parameters: string[]) {
+	public constructor(value: ASTNode, implicitParameters: string[], explicitParameters: string[]) {
 		this.value = value;
-		this.parameters = parameters;
+		this.implicitParameters = implicitParameters;
+		this.explicitParameters = explicitParameters;
 	}
 
 	public evaluate(context: STContext): STObject {
-		return new STBlock((parameters) => {
+		return new STBlock(this.implicitParameters, this.explicitParameters, (implicitParameters, explicitParameters) => {
 			let subContext = context.asDelegate();
 			let parameterIndex = 0;
-			parameters.forEach(parameter => {
-				// TODO: Implement proper locals
-				subContext.setVariable(parameter.label, parameter.value, true);
-				if (parameter.label !== this.parameters[parameterIndex]) {
-					throw new STParseException("Provided parameter #" + parameterIndex + " " + parameter.label + " not declared in block!");
+			explicitParameters.forEach(explicitParameter => {
+				subContext.setVariableLocally(explicitParameter.label, explicitParameter.value);
+
+				if (explicitParameter.label !== this.explicitParameters[parameterIndex]) {
+					throw new STParseException("Provided parameter #" + parameterIndex + " " + explicitParameter.label + " not declared in block!");
 				}
+
 				parameterIndex++;
+			});
+			implicitParameters.forEach(implicitParameter => {
+				subContext.setVariableLocally(implicitParameter.label, implicitParameter.value);
 			});
 			return this.value.evaluate(subContext);
 		});
 	}
 
 	public toString(): string {
-		return "Block [" + this.parameters + "|" + this.value + "]";
+		return "Block [" + this.explicitParameters + " (" + this.implicitParameters + ")|" + this.value + "]";
 	}
 }
 

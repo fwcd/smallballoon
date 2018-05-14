@@ -10,8 +10,8 @@ export type MessageHandler = (message: STMessage) => STObject;
  */
 export class STMethodHolder extends STObject {
 	private methods: { [selector: string] : MessageHandler; } = {};
-	private postMethodHandler: (msg: STMessage) => STObject = (msg: STMessage) => new STNil(this);
-	private delegate: STObject = new STNil(this);
+	private postMethodHandler: (msg: STMessage) => STObject = (msg => new STNil("Empty post method handler"));
+	private delegate: STObject = new STNil("Empty STMethodHandler.delegate");
 
 	public constructor() {
 		super();
@@ -35,6 +35,7 @@ export class STMethodHolder extends STObject {
 		if (!postMethodHandlerResult.isNil()) {
 			return postMethodHandlerResult;
 		}
+
 		if (!this.delegate.isNil()) {
 			return this.delegate.receiveMessage(message);
 		}
@@ -49,11 +50,15 @@ export class STMethodHolder extends STObject {
 	}
 
 	protected setPostMethodHandler(handler: (msg: STMessage) => STObject) {
-		this.postMethodHandler = handler;
+		if (handler !== null && handler !== undefined) {
+			this.postMethodHandler = handler;
+		}
 	}
 
 	protected setDelegate(delegate: STObject): void {
-		this.delegate = delegate;
+		if (delegate !== null && delegate !== undefined) {
+			this.delegate = delegate;
+		}
 	}
 
 	protected addMethod(selector: string, handler: MessageHandler): void {

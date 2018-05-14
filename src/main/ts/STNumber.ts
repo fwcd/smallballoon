@@ -4,6 +4,7 @@ import { STNil } from "./STNil";
 import { STObject } from "./STObject";
 import { STTypeException } from "./utils/STTypeException";
 import { STBoolean } from "./STBoolean";
+import { STString } from "./STString";
 
 /**
  * A wrapper-class to access and manipulate numbers
@@ -25,6 +26,7 @@ export class STNumber extends STMethodHolder {
 		this.addMethod("lessThan:", (msg) => STBoolean.from(this.value < this.firstArgAsNum(msg).value));
 		this.addMethod("lessOrEqual:", (msg) => STBoolean.from(this.value <= this.firstArgAsNum(msg).value));
 		this.addMethod("equals:", (msg) => STBoolean.from(this.value === this.firstArgAsNum(msg).value));
+		this.addMethod("asString", (msg) => new STString("" + this.value));
 	}
 
 	private firstArgAsNum(message: STMessage): STNumber {

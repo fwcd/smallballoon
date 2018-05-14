@@ -21,12 +21,12 @@ export class STContext {
 
 	public static create(): STContext {
 		let instance = new STContext();
-		instance.variables["Transcript"] = new STTranscript();
-		instance.variables["Object"] = new STClass("Object");
-		instance.variables["true"] = STBoolean.TRUE;
-		instance.variables["false"] = STBoolean.FALSE;
-		instance.variables["JS"] = new STJSRuntime();
-		instance.variables["Runtime"] = new STRuntime(instance);
+		instance.setVariableLocally("Transcript", new STTranscript());
+		instance.setVariableLocally("Object", new STClass());
+		instance.setVariableLocally("true", STBoolean.TRUE);
+		instance.setVariableLocally("false", STBoolean.FALSE);
+		instance.setVariableLocally("JS", new STJSRuntime());
+		instance.setVariableLocally("Runtime", new STRuntime(instance));
 		return instance;
 	}
 
@@ -58,6 +58,7 @@ export class STContext {
 	}
 
 	public setVariableLocally(name: string, value: STObject): void {
+		value.onAssignTo(name);
 		this.variables[name] = value;
 		LOG.trace("{} now equals {} in context {}", name, value, this.id);
 	}

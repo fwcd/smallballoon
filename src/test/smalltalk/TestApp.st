@@ -40,3 +40,23 @@ b := "A global variable".
 ] value.
 Transcript show:("Global a: " and:a).
 Transcript show:("Global b: " and:b).
+
+Transcript show:"=== Dynamic classes testing ===".
+Vector := Object subclass.
+Vector setMethod:"x" to:[self get:"x"].
+Vector setMethod:"y" to:[self get:"y"].
+Vector setClassMethod:"ofX:y:" to:[:x :y |
+	| vec |
+	vec := Vector new.
+	vec set:"x" to:x.
+	vec set:"y" to:y.
+	vec.
+].
+Vector setMethod:"add:" to:[:other |
+	Vector ofX:((self x) plus:(other x)) y:((self y) plus:(other y)).
+].
+
+vecA := Vector ofX:24 y:12.
+vecB := Vector ofX:13 y:4.
+vecC := vecA add:vecB.
+Transcript show:vecC.

@@ -23,9 +23,9 @@ class Logger {
 	 * Logs a string internally. It should only be called
 	 * once through an internal method to display the
 	 * caller that originally logged the string.
-	 * 
+	 *
 	 * @param prefix - An appended prefix
-	 * @param msg - The message including {} placeholders
+	 * @param msg - The message including placeholders ({} or {:?})
 	 * @param insertions - The items that replace their respective placeholders
 	 * @param msgLevel - The log level of the message
 	 */
@@ -38,10 +38,16 @@ class Logger {
 			while (charIndex < msg.length) {
 				let c = msg.charAt(charIndex);
 
-				if (c === "{" && msg.charAt(charIndex + 1) === "}") {
+				if (this.substringStartsWith(charIndex, msg, "{}")) {
+					// Insert placeholder
 					output += insertions[placeholderIndex];
 					placeholderIndex++;
 					charIndex += 2;
+				} else if (this.substringStartsWith(charIndex, msg, "{:?}")) {
+					// Insert placeholder as JSON
+					output += JSON.stringify(insertions[placeholderIndex]);
+					placeholderIndex++;
+					charIndex += 4;
 				} else {
 					output += c;
 					charIndex++;
@@ -50,6 +56,15 @@ class Logger {
 
 			console.log(output);
 		}
+	}
+
+	private substringStartsWith(substrStartIndex: number, str: string, matched: string): boolean {
+		for (let i=0; i<matched.length; i++) {
+			if (str.charAt(substrStartIndex + i) !== matched.charAt(i)) {
+				return false;
+			}
+		}
+		return true;
 	}
 
 	public deepTrace(msg: string, ...insertions: any[]): void {

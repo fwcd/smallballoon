@@ -121,9 +121,10 @@ export class STParser {
 			do {
 				c = contents.charAt(i);
 
-				if (c === " " || c === "|") {
+				if (c === " " || c === "|" || c === ":") {
 					if (currentParameter.length > 0) {
 						parameters.push(currentParameter);
+						currentParameter = "";
 					}
 				} else {
 					currentParameter += c;
@@ -133,7 +134,7 @@ export class STParser {
 			} while (c !== "|");
 		}
 
-		let node = new BlockNode(this.parseSequence(contents.substring(i)), parameters);
+		let node = new BlockNode(this.parseSequence(contents.substring(i)), [], parameters);
 		return node;
 	}
 
@@ -274,10 +275,10 @@ export class STParser {
 
 		if (shiftedSplit.length === 1) {
 			node.labels.push(shiftedSplit[0]);
-			node.values.push(new NilNode("STScope.parseMessage(...) - no argument value"));
+			node.values.push(new NilNode("STParser.parseMessage(...) - no argument value"));
 		} else {
 			let currentLabel: string = "";
-			let currentValue: ASTNode = new NilNode("STScope.parseMessage(...)");
+			let currentValue: ASTNode = new NilNode("STParser.parseMessage(...)");
 			let nextLabel: string = shiftedSplit[0].trim();
 
 			for (let i=1; i<shiftedSplit.length; i++) {

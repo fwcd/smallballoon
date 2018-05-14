@@ -1,10 +1,10 @@
-import { STMessage, STMessageParameter } from "./STMessage";
+import { STMessageParameter } from "./STMessage";
 import { STObject } from "./STObject";
 import { STMethodHolder } from "./STMethodHolder";
 import { STBoolean } from "./STBoolean";
 import { STNil } from "./STNil";
 
-export type STBlockEvaluator = (parameters: STMessageParameter[]) => STObject;
+export type STBlockEvaluator = (implicitParameters: STMessageParameter[], explicitParameters: STMessageParameter[]) => STObject;
 
 /**
  * A block of Smalltalk code that can be
@@ -14,10 +14,14 @@ export type STBlockEvaluator = (parameters: STMessageParameter[]) => STObject;
  * languages.
  */
 export class STBlock extends STMethodHolder {
+	public readonly implicitParameters: string[];
+	public readonly explicitParameters: string[];
 	private evaluator: STBlockEvaluator;
 
-	public constructor(evaluator: STBlockEvaluator) {
+	public constructor(implicitParameters: string[], explicitParameters: string[], evaluator: STBlockEvaluator) {
 		super();
+		this.implicitParameters = implicitParameters;
+		this.explicitParameters = explicitParameters;
 		this.evaluator = evaluator;
 
 		this.addMethod("value", (msg) => this.evaluate());
@@ -49,15 +53,15 @@ export class STBlock extends STMethodHolder {
 			} while (!this.evaluate().expect(STBoolean).value);
 			return new STNil(this);
 		});
-		this.setPostMethodHandler((msg) => this.evaluateWith(msg.parameters));
+		this.setPostMethodHandler((msg) => this.evaluateWith([], msg.parameters));
 	}
 
-	public evaluateWith(parameters: STMessageParameter[]): STObject {
-		return this.evaluator(parameters);
+	public evaluateWith(implicitParameters: STMessageParameter[], explicitParameters: STMessageParameter[]): STObject {
+		return this.evaluator(implicitParameters, explicitParameters);
 	}
 
 	public evaluate(): STObject {
-		return this.evaluator([]);
+		return this.evaluator([], []);
 	}
 
 	// Override

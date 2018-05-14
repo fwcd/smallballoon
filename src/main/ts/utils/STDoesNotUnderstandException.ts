@@ -10,6 +10,6 @@ export class STDoesNotUnderstandException implements Error {
 	readonly message: string;
 
 	constructor(receiver: STObject, message: STMessage) {
-		this.message = receiver + " does not understand " + message;
+		this.message = receiver + " (of type " + receiver.getClassName() + ") does not understand " + message;
 	}
 }

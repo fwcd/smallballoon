@@ -12,16 +12,30 @@ export class STObject {
 	// Do not override this method!!
 	public receiveMessage(message: STMessage): STObject {
 		LOG.trace("{} received {}", this, message);
+		return this.receiveMessageSilently(message);
+	}
+
+	// Do not override this method!!
+	public receiveMessageSilently(message: STMessage): STObject {
 		return this.handleMessage(message);
 	}
 
 	protected doesNotUnderstand(message: STMessage): STObject {
 		throw new STDoesNotUnderstandException(this, message);
+		// return new STNil(toString() + " which does not understand " + message.getSelector().value);
 	}
 
 	// Intended to be overriden by subclasses
 	protected handleMessage(message: STMessage): STObject {
 		return this.doesNotUnderstand(message);
+	}
+
+	// Intended to be overriden by subclasses
+	public onAssignTo(name: string): void {
+		// Called when this object is assigned
+		// to a variable using a given name.
+		//
+		// This is useful for
 	}
 
 	public getClassName(): string {

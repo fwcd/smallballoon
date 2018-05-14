@@ -1,7 +1,6 @@
 # TODO
 
 * Proper import file path resolving (relative to .st file)
-* Dynamic classes
 * Arrays
 * Comments
 * Operators

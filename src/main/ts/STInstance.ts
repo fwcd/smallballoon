@@ -26,6 +26,17 @@ export class STInstance extends STMethodHolder {
 
 	// Override
 	public getClassName(): string {
-		return "Instance<" + this.stClass.name + ">";
+		return "Instance<" + this.stClass.getName() + ">";
+	}
+
+	// Override
+	public toString(): string {
+		let str = "Instance<" + this.stClass.getName() + "> {";
+
+		for (let propertyName in this.properties) {
+			str += propertyName + " = " + this.properties[propertyName] + ", ";
+		}
+
+		return str.substring(0, str.length - 2) + "}";
 	}
 }
