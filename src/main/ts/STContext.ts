@@ -43,6 +43,12 @@ export class STContext {
 				.reduce((a, b) => a || b));
 	}
 
+	public declareLocals(names: string[]): void {
+		names.forEach(name => {
+			this.setVariableLocally(name, new STNil("Empty local variable"));
+		});
+	}
+
 	public getVariableLocally(name: string): STObject {
 		if (name in this.variables) {
 			return this.variables[name];
@@ -53,26 +59,26 @@ export class STContext {
 
 	public setVariableLocally(name: string, value: STObject): void {
 		this.variables[name] = value;
+		LOG.trace("{} now equals {} in context {}", name, value, this.id);
 	}
 
 	public setVariable(name: string, value: STObject, globalFirst: boolean): void {
 		// Re-assign locally first
 		if (name in this.variables) {
 			this.setVariableLocally(name, value);
-		}
+		} else {
+			let hasFoundDeclaration = false;
+			this.delegates.forEach(delegate => {
+				if (!hasFoundDeclaration && (globalFirst || delegate.hasVariable(name))) {
+					delegate.setVariable(name, value, globalFirst);
+					hasFoundDeclaration = true;
+				}
+			});
 
-		let hasFoundDeclaration = false;
-		this.delegates.forEach(delegate => {
-			if (!hasFoundDeclaration && (globalFirst || delegate.hasVariable(name))) {
-				delegate.setVariable(name, value, globalFirst);
-				hasFoundDeclaration = true;
+			if (!hasFoundDeclaration) {
+				this.setVariableLocally(name, value);
 			}
-		});
-
-		if (!hasFoundDeclaration) {
-			this.setVariableLocally(name, value);
 		}
-		LOG.trace("{} now equals {} in {}", name, value, this.id);
 	}
 
 	public getVariable(name: string): STObject {

@@ -2,6 +2,7 @@ import { STMessage } from "./STMessage";
 import { STNil } from "./STNil";
 import { LOG } from "./utils/Logger";
 import { STTypeException } from "./utils/STTypeException";
+import { STDoesNotUnderstandException } from "./utils/STDoesNotUnderstandException";
 
 /**
  * A Smalltalk object that can receive messages.
@@ -14,9 +15,13 @@ export class STObject {
 		return this.handleMessage(message);
 	}
 
+	protected doesNotUnderstand(message: STMessage): STObject {
+		throw new STDoesNotUnderstandException(this, message);
+	}
+
 	// Intended to be overriden by subclasses
 	protected handleMessage(message: STMessage): STObject {
-		return new STNil(this); // Does not handle messages by default
+		return this.doesNotUnderstand(message);
 	}
 
 	public getClassName(): string {

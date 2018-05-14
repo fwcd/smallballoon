@@ -12,9 +12,11 @@ export interface ASTNode {
 }
 
 export class ExpressionListNode implements ASTNode {
+	public readonly locals: string[] = [];
 	public readonly expressions: ASTNode[] = [];
 
 	public evaluate(context: STContext): STObject {
+		context.declareLocals(this.locals);
 		let lastEvaluation: STObject = new STNil("ExpressionListNode.evaluate(...)");
 		this.expressions.forEach(exp => {
 			lastEvaluation = exp.evaluate(context);

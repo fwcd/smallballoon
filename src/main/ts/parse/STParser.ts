@@ -143,11 +143,14 @@ export class STParser {
 	}
 
 	private parseSequence(raw: string): ASTNode {
+		let trimmed = raw.trim();
 		let node = new ExpressionListNode();
 		let stackHeight = 0;
 		let current = "";
 		let self = this;
 		let inString = false;
+		let inLocalVarDeclarationList = false;
+		let lastLocalVariable = "";
 
 		function pushCurrent(): void {
 			if (current.length > 0) {
@@ -155,10 +158,28 @@ export class STParser {
 			}
 		}
 
-		for (let i=0; i<raw.length; i++) {
-			let c = raw.charAt(i);
+		function pushLocal(): void {
+			if (lastLocalVariable.length > 0) {
+				node.locals.push(lastLocalVariable);
+				lastLocalVariable = "";
+			}
+		}
 
-			if (!inString && c === "." && stackHeight === 0) {
+		for (let i=0; i<trimmed.length; i++) {
+			let c = trimmed.charAt(i);
+
+			if (i === 0 && c === "|") {
+				inLocalVarDeclarationList = true;
+			} else if (inLocalVarDeclarationList) {
+				if (c === "|") {
+					pushLocal();
+					inLocalVarDeclarationList = false;
+				} else if (c === " ") {
+					pushLocal();
+				} else {
+					lastLocalVariable += c;
+				}
+			} else if (!inString && c === "." && stackHeight === 0) {
 				pushCurrent();
 				current = "";
 			} else {
@@ -184,15 +205,19 @@ export class STParser {
 		let stackHeight = 0;
 		let i = 0;
 		let c: string;
+		let inString = false;
 		do {
 			c = expression.charAt(i);
-			if (this.isOpeningBracket(c)) {
+
+			if (c === "\"") {
+				inString = !inString;
+			} else if (this.isOpeningBracket(c)) {
 				stackHeight++;
 			} else if (this.isClosingBracket(c)) {
 				stackHeight--;
 			}
 			i++;
-		} while (stackHeight > 0 || c !== " ");
+		} while (stackHeight > 0 || c !== " " || inString);
 
 		let splittedMessage: string[] = strSplitAt(expression, i);
 		let receiver = this.parse(splittedMessage[0]);
@@ -206,17 +231,20 @@ export class STParser {
 
 		let currentParameter: string = "";
 		let stackHeight: number = 0;
+		let inString = false;
 
 		for (let i=0; i<trimmedParameters.length; i++) {
 			let c = trimmedParameters.charAt(i);
 
-			if (c === ":" && stackHeight === 0) {
+			if (!inString && c === ":" && stackHeight === 0) {
 				result.push(currentParameter);
 				currentParameter = "";
 			} else {
 				currentParameter += c;
 
-				if (this.isOpeningBracket(c)) {
+				if (c === "\"") {
+					inString = !inString;
+				} else if (this.isOpeningBracket(c)) {
 					LOG.deepTrace("Opening {} in {}", c, rawParameters);
 					stackHeight++;
 				} else if (this.isClosingBracket(c)) {

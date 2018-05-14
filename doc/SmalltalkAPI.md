@@ -51,6 +51,7 @@ A sequence of characters. Can only be created through literals currently.
 | ------ | ----------- |
 | equals:String -> Boolean | Checks for equality (case-sensitive) |
 | toNumber -> Number | Converts this string to a number |
+| and:String -> String | Concatenates this string with another |
 
 ### Number
 A floating-point number.

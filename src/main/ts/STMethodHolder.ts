@@ -13,6 +13,14 @@ export class STMethodHolder extends STObject {
 	private postMethodHandler: (msg: STMessage) => STObject = (msg: STMessage) => new STNil(this);
 	private delegate: STObject = new STNil(this);
 
+	public constructor() {
+		super();
+		this.addMethod("doesNotUnderstand:", (msg) => {
+			let notUnderstoodMessage = msg.getValue(0).expect(STMessage);
+			return this.doesNotUnderstand(notUnderstoodMessage);
+		})
+	}
+
 	// Override
 	protected handleMessage(message: STMessage): STObject {
 		let selector: string = message.getSelector().value;
@@ -30,7 +38,14 @@ export class STMethodHolder extends STObject {
 		if (!this.delegate.isNil()) {
 			return this.delegate.receiveMessage(message);
 		}
-		return new STNil(this);
+
+		this.receiveMessage(new STMessage(this, [{
+			label: "doesNotUnderstand",
+			value: message
+		}]));
+		// Control will never reach this point if
+		// "doesNotUnderstand:" is not overridden
+		return super.handleMessage(message);
 	}
 
 	protected setPostMethodHandler(handler: (msg: STMessage) => STObject) {

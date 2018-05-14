@@ -17,6 +17,7 @@ export class STString extends STMethodHolder {
 		this.value = value;
 		this.addMethod("equals:", (msg) => STBoolean.from(this.value === msg.getValue(0).expect(STString).value));
 		this.addMethod("toNumber", (msg) => new STNumber(+this.value));
+		this.addMethod("and:", (msg) => new STString(this.value + msg.getValue(0).expect(STString).value))
 	}
 
 	// Override

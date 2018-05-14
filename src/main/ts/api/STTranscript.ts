@@ -14,9 +14,13 @@ export class STTranscript extends STMethodHolder {
 	public constructor() {
 		super();
 		this.addMethod("show:", (message) => {
-			console.log(message.parameters[0].value.toString());
+			console.log(message.getValue(0).toString());
 			return new STNil(this);
 		});
+		this.addMethod("show", (message) => {
+			console.log("nil");
+			return message.getValue(0);
+		})
 	}
 
 	// Override
