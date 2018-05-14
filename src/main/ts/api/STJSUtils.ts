@@ -2,9 +2,12 @@ import { STObject } from "../STObject";
 import { STNumber } from "../STNumber";
 import { STString } from "../STString";
 import { STTypeException } from "../utils/STTypeException";
+import { STNil } from "../STNil";
 
 export function toSmalltalkObject(jsObject: any): STObject {
-	if (this.jsObject instanceof STObject) {
+	if (jsObject == null || jsObject == undefined) {
+		return new STNil("STJSUtils.toSmalltalkObject(...)");
+	} else if (this.jsObject instanceof STObject) {
 		return this.jsObject;
 	} else if (!isNaN(jsObject)) {
 		return new STNumber(this.jsObject);

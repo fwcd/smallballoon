@@ -36,6 +36,15 @@ export class STBoolean extends STMethodHolder {
 		this.addMethod("not", (msg) => STBoolean.from(!value)); // TODO
 		this.addMethod("or:", (msg) => this.combine(this.firstArgAsBool(msg), (a, b) => a || b)); // TODO
 		this.addMethod("xor:", (msg) => this.combine(this.firstArgAsBool(msg), (a, b) => a != b)); // TODO
+		this.addMethod("equals", (msg) => STBoolean.FALSE);
+		this.addMethod("equals:", (msg) => {
+			let other = msg.getValue(0);
+			if (other instanceof STBoolean) {
+				return STBoolean.from(this.value === other.value);
+			} else {
+				return STBoolean.FALSE;
+			}
+		});
 	}
 
 	public static from(value: boolean): STBoolean {

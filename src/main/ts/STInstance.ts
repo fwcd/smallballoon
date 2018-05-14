@@ -18,10 +18,17 @@ export class STInstance extends STMethodHolder {
 		this.stClass = stClass;
 
 		this.addMethod("set:to:", (msg: STMessage) => {
-			this.properties[msg.getValue(0).expect(STString).value] = msg.getValue(1);
+			this.properties[msg.getValue(0).toString()] = msg.getValue(1);
 			return STEmpty.getInstance();
 		});
-		this.addMethod("get:", (msg: STMessage) => this.properties[msg.getValue(0).expect(STString).value]);
+		this.addMethod("get:", (msg: STMessage) => {
+			let propertyName = msg.getValue(0).toString();
+			if (propertyName in this.properties) {
+				return this.properties[propertyName];
+			} else {
+				return new STNil("STInstance while calling get:");
+			}
+		});
 		this.addMethod("asString", (msg) => new STString(this.toString()));
 		this.setPreMethodHandler((msg: STMessage) => this.stClass.receiveInstanceMessage(this, msg));
 	}

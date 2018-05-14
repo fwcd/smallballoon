@@ -39,8 +39,12 @@ export class STJSObject extends STMethodHolder {
 		return "JSObject";
 	}
 
+	public toJSON(): string {
+		return JSON.stringify(this.jsObject);
+	}
+
 	// Override
 	public toString(): string {
-		return this.jsObject;
+		return this.jsObject.toString();
 	}
 }

@@ -1,5 +1,6 @@
 Runtime import:"src/test/smalltalk/TestImport.st".
 Runtime import:"src/main/smalltalk/Array.st".
+Runtime import:"src/main/smalltalk/Set.st".
 Runtime import:"src/main/smalltalk/Vector2D.st".
 
 b := (6 times:2).
@@ -61,8 +62,16 @@ testArray := Array create.
 testArray push:5.
 testArray push:23.
 testArray push:"test".
+testArray at:1 put:"replacement".
 Transcript show:testArray.
 Transcript show:("length: " and:(testArray length)).
 testArray forEach:[:each |
 	Transcript show:each.
 ].
+
+Transcript show:"=== Set testing ===".
+testSet := Set create.
+testSet insert:"one".
+testSet insert:"two".
+Transcript show:(testSet contains:"three").
+Transcript show:(testSet contains:"one").

@@ -32,8 +32,8 @@ The meta-representation of an instance of a `Class`.
 
 | Method | Description |
 | ------ | ----------- |
-| set:String to:Object -> Nil | Sets a property |
-| get:String -> Object | Fetches a property by name |
+| set:Object to:Object -> Nil | Sets a property by name |
+| get:Object -> Object | Fetches a property by name |
 | asString -> String | Converts this instance to a string |
 
 Delegates other messages to registered instance methods in `Class`.
