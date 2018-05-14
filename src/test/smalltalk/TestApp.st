@@ -22,6 +22,7 @@ i := 0.
 
 Transcript show:"=== JS-bridge testing ===".
 JS run:"console.log('Hello JavaScript!')".
+(JS get:"console") log:"Hello JSObject!".
 
 Transcript show:"=== Import testing ===".
 Runtime import:"src/test/smalltalk/TestImport.st".
@@ -42,21 +43,9 @@ Transcript show:("Global a: " and:a).
 Transcript show:("Global b: " and:b).
 
 Transcript show:"=== Dynamic classes testing ===".
-Vector := Object subclass.
-Vector setMethod:"x" to:[self get:"x"].
-Vector setMethod:"y" to:[self get:"y"].
-Vector setClassMethod:"ofX:y:" to:[:x :y |
-	| vec |
-	vec := Vector new.
-	vec set:"x" to:x.
-	vec set:"y" to:y.
-	vec.
-].
-Vector setMethod:"add:" to:[:other |
-	Vector ofX:((self x) plus:(other x)) y:((self y) plus:(other y)).
-].
+Runtime import:"src/main/smalltalk/Vector2D.st".
 
-vecA := Vector ofX:24 y:12.
-vecB := Vector ofX:13 y:4.
-vecC := vecA add:vecB.
-Transcript show:vecC.
+vecA := Vector2D ofX:24 andY:12.
+vecB := Vector2D ofX:2 andY:3.
+vecC := vecA plus:vecB.
+Transcript show:(((vecC toString) and:" has the length ") and:(vecC length)).

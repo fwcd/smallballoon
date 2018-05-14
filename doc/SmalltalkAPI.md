@@ -34,7 +34,7 @@ The meta-representation of an instance of a `Class`.
 | ------ | ----------- |
 | set:String to:Object -> Nil | Sets a property |
 | get:String -> Object | Fetches a property by name |
-| asString -> String | Converts this instance to a string |
+| toString -> String | Converts this instance to a string |
 
 Delegates other messages to registered instance methods in `Class`.
 
@@ -52,7 +52,7 @@ A sequence of characters. Can only be created through literals currently.
 | ------ | ----------- |
 | equals:String -> Boolean | Checks for equality (case-sensitive) |
 | toNumber -> Number | Converts this string to a number |
-| and:String -> String | Concatenates this string with another |
+| and:Object -> String | Concatenates this string with another |
 
 ### Number
 A floating-point number.
@@ -63,12 +63,14 @@ A floating-point number.
 | minus:Number -> Number | Performs subtraction |
 | times:Number -> Number | Performs multiplication |
 | divide:Number -> Number | Performs division |
+| sqrt -> Number | Returns the square root of this number |
+| pow:Number -> Number | Raises this number to the given exponent |
 | greaterThan:Number -> Boolean | Checks whether this number is greater than another |
 | greaterOrEqual:Number -> Boolean | Checks whether this number is greater than or equal to another |
 | lessThan:Number -> Boolean | Checks whether this number is less than another |
 | lessOrEqual:Number -> Boolean | Checks whether this number is less than or equal to another |
 | equals:Number -> Boolean | Checks whether this number is equal to another |
-| asString -> String | Converts this number to a string |
+| toString -> String | Converts this number to a string |
 
 ## Boolean
 A truth value that can either be true or false.
@@ -108,6 +110,26 @@ An API class that allows Smalltalk to call JavaScript code.
 | Method | Description |
 | ------ | ----------- |
 | run:String -> Object | Runs JavaScript code and returns the result as Object or Number if appropriate, otherwise as String |
+| get:String -> JSObject | Fetches a reference to the provided JS object and returns a Smalltalk wrapper |
+
+### JSObject
+A wrapper for a JavaScript object that is accessible from Smalltalk.
+
+| Method | Description |
+| ------ | ----------- |
+| toSTObject -> Object | Tries to convert the object to a Smalltalk representation (Object or Number, otherwise String) |
+
+Interprets other messages as method calls on this particular JS object. For example:
+
+```smalltalk
+jsObject log:"Test" and:24.
+```
+
+would be equivalent to:
+
+```javascript
+jsObject.log("Test", 24);
+```
 
 ### Runtime
 Provides access to runtime-related methods.

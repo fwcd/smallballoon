@@ -12,7 +12,7 @@ i := 0.
 100% interoperable with JS:
 
 ```smalltalk
-JS run:"console.log('Hello JavaScript!')".
+(JS get:"console") log:"Hello JavaScript!".
 ```
 
 ```javascript

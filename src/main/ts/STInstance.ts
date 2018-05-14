@@ -21,6 +21,7 @@ export class STInstance extends STMethodHolder {
 			return new STNil(this);
 		});
 		this.addMethod("get:", (msg: STMessage) => this.properties[msg.getValue(0).expect(STString).value]);
+		this.addMethod("toString", (msg) => new STString(this.toString()));
 		this.setPostMethodHandler((msg: STMessage) => this.stClass.receiveInstanceMessage(this, msg));
 	}
 

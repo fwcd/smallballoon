@@ -43,7 +43,7 @@ export class STObject {
 	}
 
 	/**
-	 * Dynamically casts a Smalltalk object while
+	 * Dynamically casts this Smalltalk object while
 	 * catching type errors at runtime.
 	 *
 	 * @param castedType - The resulting type
@@ -52,8 +52,24 @@ export class STObject {
 		if (this instanceof castedType) {
 			return this;
 		} else {
-			throw new STTypeException(this.getClassName() + " does not match " + castedType);
+			throw new STTypeException(this + " (of type " + this.getClassName() + ") does not match " + castedType);
 		}
+	}
+
+	/**
+	 * Safely executes a block of code if this Smalltalk
+	 * object can be dynamically converted to a given type.
+	 *
+	 * Returns itself for convenient method chaining.
+	 *
+	 * @param castedType - The casted type
+	 * @param then - The callback function
+	 */
+	public whenMatches<T extends STObject>(castedType: { new(...args: any[]): T }, then: (obj: T) => void): this {
+		if (this instanceof castedType) {
+			then(this);
+		}
+		return this;
 	}
 
 	public isNil(): boolean {
