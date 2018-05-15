@@ -14,7 +14,7 @@ This documentation documents the API of the Smalltalk implementation. Most of th
 ## Classes
 
 ### Object
-The basic building block of every Smalltalk application. The foundation of everything. Receives messages.
+The basic building block of every Smalltalk application. The foundation of everything. Receives messages. (Internally represented by an STObject or an STObjectBase)
 
 ### Class
 The meta-representation of a dynamic class that has been created in Smalltalk.
