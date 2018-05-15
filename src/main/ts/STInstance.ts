@@ -1,7 +1,7 @@
 import { STObject } from "./STObject";
 import { STClass } from "./STClass";
 import { STMessage } from "./STMessage";
-import { STMethodHolder } from "./STMethodHolder";
+import { STObjectBase } from "./STObjectBase";
 import { STString } from "./STString";
 import { STNil } from "./STNil";
 import { STEmpty } from "./STEmpty";
@@ -9,7 +9,7 @@ import { STEmpty } from "./STEmpty";
 /**
  * An instance of a Smalltalk class.
  */
-export class STInstance extends STMethodHolder {
+export class STInstance extends STObjectBase {
 	public readonly stClass: STClass;
 	private properties: { [name: string] : STObject; } = {};
 

@@ -1,4 +1,4 @@
-import { STMethodHolder } from "../STMethodHolder";
+import { STObjectBase } from "../STObjectBase";
 import { STNil } from "../STNil";
 import { STString } from "../STString";
 import { STImportManager } from "./STImportManager";
@@ -6,7 +6,7 @@ import { STContext } from "../STContext";
 import { STParser } from "../parse/STParser";
 import { lastOf } from "../utils/ArrayUtils";
 
-export class STRuntime extends STMethodHolder {
+export class STRuntime extends STObjectBase {
 	private importManager = new STImportManager();
 
 	public constructor(context: STContext) {

@@ -1,7 +1,7 @@
 import { STObject } from "../STObject";
 import { STMessage } from "../STMessage";
 import { STNil } from "../STNil";
-import { STMethodHolder } from "../STMethodHolder";
+import { STObjectBase } from "../STObjectBase";
 
 /**
  * A Smalltalk object used to output information.
@@ -10,7 +10,7 @@ import { STMethodHolder } from "../STMethodHolder";
  * be globally available to a Smalltalk application,
  * named "Transcript".
  */
-export class STTranscript extends STMethodHolder {
+export class STTranscript extends STObjectBase {
 	public constructor() {
 		super();
 		this.addMethod("show:", (message) => {

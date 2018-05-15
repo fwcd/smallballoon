@@ -1,6 +1,6 @@
 import { STMessageParameter } from "./STMessage";
 import { STObject } from "./STObject";
-import { STMethodHolder } from "./STMethodHolder";
+import { STObjectBase } from "./STObjectBase";
 import { STBoolean } from "./STBoolean";
 import { STNil } from "./STNil";
 import { STEmpty } from "./STEmpty";
@@ -14,7 +14,7 @@ export type STBlockEvaluator = (implicitParameters: STMessageParameter[], explic
  * Similar to closures or lambdas in other
  * languages.
  */
-export class STBlock extends STMethodHolder {
+export class STBlock extends STObjectBase {
 	public readonly implicitParameters: string[];
 	public readonly explicitParameters: string[];
 	private evaluator: STBlockEvaluator;

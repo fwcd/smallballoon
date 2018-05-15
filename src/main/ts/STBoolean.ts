@@ -1,4 +1,4 @@
-import { STMethodHolder } from "./STMethodHolder";
+import { STObjectBase } from "./STObjectBase";
 import { STNil } from "./STNil";
 import { STMessage } from "./STMessage";
 import { STTypeException } from "./utils/STTypeException";
@@ -8,7 +8,7 @@ import { STBlock } from "./STBlock";
  * A wrapper-class to represent booleans in Smalltalk
  * code.
  */
-export class STBoolean extends STMethodHolder {
+export class STBoolean extends STObjectBase {
 	public static readonly TRUE = new STBoolean(true);
 	public static readonly FALSE = new STBoolean(false);
 	public readonly value: boolean;

@@ -1,5 +1,5 @@
 import { STMessage } from "./STMessage";
-import { STMethodHolder } from "./STMethodHolder";
+import { STObjectBase } from "./STObjectBase";
 import { STNil } from "./STNil";
 import { STObject } from "./STObject";
 import { STTypeException } from "./utils/STTypeException";
@@ -10,7 +10,7 @@ import { STString } from "./STString";
  * A wrapper-class to access and manipulate numbers
  * from Smalltalk code.
  */
-export class STNumber extends STMethodHolder {
+export class STNumber extends STObjectBase {
 	public readonly value: number;
 
 	public constructor(value: number) {

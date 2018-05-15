@@ -3,7 +3,7 @@ import { STMessage, STMessageParameter } from "./STMessage";
 import { STNil } from "./STNil";
 import { STInstance } from "./STInstance";
 import { STSelector } from "./STSelector";
-import { STMethodHolder } from "./STMethodHolder";
+import { STObjectBase } from "./STObjectBase";
 import { STString } from "./STString";
 import { STBlock } from "./STBlock";
 import { STTypeException } from "./utils/STTypeException";
@@ -12,7 +12,7 @@ import { LOG } from "./utils/Logger";
 /**
  * A Smalltalk class.
  */
-export class STClass extends STMethodHolder {
+export class STClass extends STObjectBase {
 	private superclass: STClass = null;
 	private fieldNames: string[];
 	private classMethods: { [selector: string] : (parameters: STMessageParameter[]) => STObject; } = {};

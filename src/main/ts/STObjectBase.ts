@@ -5,14 +5,19 @@ import { STNil } from "./STNil";
 export type MessageHandler = (message: STMessage) => STObject;
 
 /**
- * A convenience class to simplify message
- * handling.
+ * Base class of almost every object hierarchy
+ * that simplifies method handling and provides
+ * objects with a set of standard methods.
+ *
+ * ALWAYS inherit from this class (rather than from
+ * STObject directly), unless you have a very good
+ * reason not to.
  */
-export class STMethodHolder extends STObject {
+export class STObjectBase extends STObject {
 	private methods: { [selector: string] : MessageHandler; } = {};
 	private preMethodHandler: (msg: STMessage) => STObject = (msg => new STNil("Empty pre method handler"));
 	private postMethodHandler: (msg: STMessage) => STObject = (msg => new STNil("Empty post method handler"));
-	private delegate: STObject = new STNil("Empty STMethodHandler.delegate");
+	private delegate: STObject = null; // Intentionally not an STNil to avoid a circular dependency
 
 	public constructor() {
 		super();
@@ -42,7 +47,7 @@ export class STMethodHolder extends STObject {
 			return postMethodHandlerResult;
 		}
 
-		if (!this.delegate.isNil()) {
+		if (this.delegate !== null && this.delegate !== undefined && !this.delegate.isNil()) {
 			return this.delegate.receiveMessage(message);
 		}
 

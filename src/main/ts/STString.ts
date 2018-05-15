@@ -1,7 +1,7 @@
 import { STObject } from "./STObject";
 import { STMessage } from "./STMessage";
 import { STNil } from "./STNil";
-import { STMethodHolder } from "./STMethodHolder";
+import { STObjectBase } from "./STObjectBase";
 import { STBoolean } from "./STBoolean";
 import { STNumber } from "./STNumber";
 
@@ -9,7 +9,7 @@ import { STNumber } from "./STNumber";
  * A wrapper-class to access and manipulate strings
  * from Smalltalk code.
  */
-export class STString extends STMethodHolder {
+export class STString extends STObjectBase {
 	public readonly value: string;
 
 	public constructor(value: string) {

@@ -1,12 +1,13 @@
 import { STObject } from "./STObject";
+import { STObjectBase } from "./STObjectBase";
 
 /**
  * A Smalltalk object representing "nothing".
  * Similar to null/void in other languages.
- * 
+ *
  * Tracks it's creator to ease debugging.
  */
-export class STNil extends STObject {
+export class STNil extends STObjectBase {
 	private static INSTANCE: STNil = new STNil("anonymous");
 	private creator: string;
 
@@ -32,7 +33,7 @@ export class STNil extends STObject {
 
 	/**
 	 * Fetches an anonymous instance of STNil.
-	 * 
+	 *
 	 * You should prefer to use the constructor
 	 * over this function.
 	 */

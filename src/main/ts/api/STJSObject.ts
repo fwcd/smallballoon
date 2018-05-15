@@ -1,11 +1,11 @@
-import { STMethodHolder } from "../STMethodHolder";
+import { STObjectBase } from "../STObjectBase";
 import { STObject } from "../STObject";
 import { STNumber } from "../STNumber";
 import { STString } from "../STString";
 import { toSmalltalkObject, toJavaScriptObject } from "./STJSUtils";
 import { STNil } from "../STNil";
 
-export class STJSObject extends STMethodHolder {
+export class STJSObject extends STObjectBase {
 	private jsObject: any;
 
 	public constructor(jsObject: any) {

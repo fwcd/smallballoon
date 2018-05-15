@@ -1,4 +1,4 @@
-import { STMethodHolder } from "../STMethodHolder";
+import { STObjectBase } from "../STObjectBase";
 import { STString } from "../STString";
 import { STObject } from "../STObject";
 import { STNumber } from "../STNumber";
@@ -6,7 +6,7 @@ import { STBoolean } from "../STBoolean";
 import { STJSObject } from "./STJSObject";
 import { toSmalltalkObject } from "./STJSUtils";
 
-export class STJSRuntime extends STMethodHolder {
+export class STJSRuntime extends STObjectBase {
 	public constructor() {
 		super();
 		this.addMethod("run:", msg => {

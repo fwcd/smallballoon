@@ -7,6 +7,11 @@ import { STDoesNotUnderstandException } from "./utils/STDoesNotUnderstandExcepti
 /**
  * A Smalltalk object that can receive messages.
  * Responds with nil to every message by default.
+ *
+ * To ensure universal availability of standard methods
+ * (equals, ...), you should NEVER inherit from STObject
+ * directly. ALWAYS inherit from STObjectBase instead, unless
+ * you have a very good reason not to.
  */
 export class STObject {
 	// Do not override this method!!

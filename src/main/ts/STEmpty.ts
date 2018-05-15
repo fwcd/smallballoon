@@ -1,11 +1,12 @@
 import { STObject } from "./STObject";
+import { STObjectBase } from "./STObjectBase";
 
 /**
  * A non-nil value to represent an intended
  * emtpy result that is not supposed to
  * possibly throw an exception.
  */
-export class STEmpty extends STObject {
+export class STEmpty extends STObjectBase {
 	public static readonly INSTANCE = new STEmpty();
 
 	private constructor() {
