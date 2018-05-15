@@ -1,6 +1,6 @@
 import { STMessage } from "./STMessage";
-import { STObject } from "./STObject";
 import { STNil } from "./STNil";
+import { STObject } from "./STObject";
 
 export type MessageHandler = (message: STMessage) => STObject;
 
@@ -21,10 +21,10 @@ export class STObjectBase extends STObject {
 
 	public constructor() {
 		super();
-		this.addMethod("doesNotUnderstand:", (msg) => {
+		this.addMethod("doesNotUnderstand:", msg => {
 			let notUnderstoodMessage = msg.getValue(0).expect(STMessage);
 			return this.doesNotUnderstand(notUnderstoodMessage);
-		})
+		});
 	}
 
 	// Override
@@ -87,5 +87,10 @@ export class STObjectBase extends STObject {
 
 	protected addMethod(selector: string, handler: MessageHandler): void {
 		this.methods[selector] = handler;
+	}
+
+	// Override
+	public getClassName(): string {
+		return "ObjectBase";
 	}
 }

@@ -1,4 +1,3 @@
-import { STObject } from "./STObject";
 import { STObjectBase } from "./STObjectBase";
 
 /**

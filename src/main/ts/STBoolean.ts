@@ -1,8 +1,8 @@
-import { STObjectBase } from "./STObjectBase";
-import { STNil } from "./STNil";
-import { STMessage } from "./STMessage";
-import { STTypeException } from "./utils/STTypeException";
 import { STBlock } from "./STBlock";
+import { STMessage } from "./STMessage";
+import { STNil } from "./STNil";
+import { STObjectBase } from "./STObjectBase";
+import { STTypeException } from "./utils/STTypeException";
 
 /**
  * A wrapper-class to represent booleans in Smalltalk
