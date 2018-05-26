@@ -138,6 +138,8 @@ would be equivalent to:
 jsObject.log("Test", 24);
 ```
 
+(The argument labels, other than the first, can be chosen arbitrarily.)
+
 ### Runtime
 Provides access to runtime-related methods.
 

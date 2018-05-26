@@ -39,6 +39,7 @@ export class STContext {
 		instance.setVariableLocally("false", STBoolean.FALSE);
 		instance.setVariableLocally("JS", new STJSRuntime(instance));
 		instance.setVariableLocally("Runtime", new STRuntime(instance));
+		instance.setVariableLocally("nil", new STNil("Smalltalk dynamically"));
 		return instance;
 	}
 
