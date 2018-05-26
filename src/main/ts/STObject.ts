@@ -13,6 +13,8 @@ import { STDoesNotUnderstandException } from "./utils/STDoesNotUnderstandExcepti
  * you have a very good reason not to.
  */
 export class STObject {
+	public static universalMethodHandler: (receiver: STObject, message: STMessage) => STObject = null;
+
 	// Do not override this method!!
 	public receiveMessage(message: STMessage): STObject {
 		LOG.debug("{} received {}", this, message);
@@ -21,6 +23,12 @@ export class STObject {
 
 	// Do not override this method!!
 	public receiveMessageSilently(message: STMessage): STObject {
+		if (STObject.universalMethodHandler !== null) {
+			let result = STObject.universalMethodHandler(this, message);
+			if (!result.isNil()) {
+				return result;
+			}
+		}
 		return this.handleMessage(message);
 	}
 

@@ -94,3 +94,9 @@ Transcript show:((JS eval:"this.square") value:5).
 	value pow:3.
 ].
 Transcript show:(JS eval:"this.cube(4)").
+
+Transcript show:"=== Nil testing ===".
+Transcript show:(nil isNil).
+Transcript show:("test" isNil).
+Transcript show:(true isNil).
+Transcript show:((4 times:4) isNil).
