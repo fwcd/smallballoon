@@ -21,11 +21,12 @@ export function toJavaScriptObject(stObject: STObject): any {
 		throw new STTypeException("Tried to convert a null/undefined STObject to a JavaScript object");
 	}
 
-	let result: any = null;
+	let result: any = undefined;
 	stObject.whenMatches(STString, obj => result = obj.value)
-			.whenMatches(STNumber, obj => result = obj.value);
+			.whenMatches(STNumber, obj => result = obj.value)
+			.whenMatches(STNil, obj => result = null)
 
-	if (result === null || result === undefined) {
+	if (result === undefined) {
 		return stObject.toString();
 	} else {
 		return result;

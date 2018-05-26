@@ -28,11 +28,13 @@ export class STJSObject extends STObjectBase {
 		});
 		this.setPostMethodHandler(msg => {
 			let methodName = msg.getName();
-			let parameters = msg.parameters
-				.filter(p => !p.value.isNil())
-				.map(p => toJavaScriptObject(p.value));
-			let result = this.jsObject[methodName].apply(this.jsObject, parameters);
+			let parameters = msg.parameters.map(p => toJavaScriptObject(p.value));
 
+			if (parameters.length === 1 && parameters[0] === null) {
+				parameters = [];
+			}
+
+			let result = this.jsObject[methodName].apply(this.jsObject, parameters);
 			return new STJSObject(result);
 		});
 	}
