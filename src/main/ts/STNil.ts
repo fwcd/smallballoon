@@ -1,5 +1,4 @@
 import { STObject } from "./STObject";
-import { STObjectBase } from "./STObjectBase";
 
 /**
  * A Smalltalk object representing "nothing".
@@ -7,7 +6,7 @@ import { STObjectBase } from "./STObjectBase";
  *
  * Tracks it's creator to ease debugging.
  */
-export class STNil extends STObjectBase {
+export class STNil extends STObject {
 	private static INSTANCE: STNil = new STNil("anonymous");
 	private creator: string;
 
