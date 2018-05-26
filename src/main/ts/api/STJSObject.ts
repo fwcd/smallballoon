@@ -19,16 +19,18 @@ export class STJSObject extends STObjectBase {
 			let raw = msg.getValue(0).expect(STString).value.replace("this", "jsObject");
 			return new STJSObject(eval(raw));
 		});
-		this.addMethod("subscriptGet:", msg => {
+		this.addMethod("getProperty:", msg => {
 			return new STJSObject(this.jsObject[<any>msg.getValue(0)]);
 		});
-		this.addMethod("subscriptSet:to:", msg => {
+		this.addMethod("setProperty:to:", msg => {
 			jsObject[<any>msg.getValue(0)] = msg.getValue(1);
-			return new STNil("STJSObject while calling subscriptSet:to:");
+			return new STNil("STJSObject while calling setProperty:to:");
 		});
 		this.setPostMethodHandler(msg => {
 			let methodName = msg.getName();
-			let parameters = msg.parameters.map(p => toJavaScriptObject(p.value));
+			let parameters = msg.parameters
+				.filter(p => !p.value.isNil())
+				.map(p => toJavaScriptObject(p.value));
 			let result = this.jsObject[methodName].apply(this.jsObject, parameters);
 
 			return new STJSObject(result);

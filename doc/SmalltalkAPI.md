@@ -122,8 +122,8 @@ A wrapper for a JavaScript object that is accessible from Smalltalk.
 | ------ | ----------- |
 | toSTObject -> Object | Tries to convert the object to a Smalltalk representation (Object or Number, otherwise String) |
 | mapUsingJS:String -> Object | Interprets the parameter as JavaScript code with "this" representing this object and wraps the evaluated result in another JSObject |
-| subscriptGet:Object -> Object | Returns the wrapped JS object after calling the subscript operator using the given parameter |
-| subscriptSet:Object to:Object -> Nil | Associates the second argument with this object after calling the subscript operator using the first argument |
+| getProperty:Object -> Object | Returns the wrapped JS object after calling the subscript operator using the given parameter |
+| setProperty:Object to:Object -> Nil | Associates the second argument with this object after calling the subscript operator using the first argument |
 
 Interprets other messages as method calls on this particular JS object. For example:
 

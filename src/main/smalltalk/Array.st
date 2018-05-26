@@ -15,11 +15,11 @@ Array setClassMethod:"of:" to:[:firstElement |
 ].
 
 Array setMethod:"at:" to:[:index |
-	(self get:"jsArray") subscriptGet:index.
+	(self get:"jsArray") getProperty:index.
 ].
 
 Array setMethod:"at:put:" to:[:index :item |
-	(self get:"jsArray") subscriptSet:index to:item.
+	(self get:"jsArray") setProperty:index to:item.
 ].
 
 Array setMethod:"push:" to:[:item |
