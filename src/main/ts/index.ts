@@ -1,12 +1,24 @@
-import * as process from "process"
-import { STLoader } from "./STLoader"
-import { STLoaderException } from "./utils/STLoaderException";
+// Export API classes
 
-let interpreter = new STLoader();
+export * from "./api/STImportManager"
+export * from "./api/STJSObject"
+export * from "./api/STJSRuntime"
+export * from "./api/STJSUtils"
+export * from "./api/STRuntime"
+export * from "./api/STTranscript"
 
-if (process.argv.length < 2) {
-	throw new STLoaderException("Missing an argument containing the Smalltalk file to be interpreted.");
-}
+export * from "./parse/ast/AbstractSyntaxTree"
 
-let filePath = process.argv[2];
-interpreter.runFile(filePath);
+export * from "./STBlock"
+export * from "./STBoolean"
+export * from "./STClass"
+export * from "./STContext"
+export * from "./STEmpty"
+export * from "./STInstance"
+export * from "./STLoader"
+export * from "./STMessage"
+export * from "./STNil"
+export * from "./STNumber"
+export * from "./STObject"
+export * from "./STObjectBase"
+export * from "./STString"

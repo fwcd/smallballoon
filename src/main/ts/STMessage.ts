@@ -1,5 +1,4 @@
 import { STObject } from "./STObject";
-import { STSelector } from "./STSelector";
 
 export interface STMessageParameter {
 	readonly label: string;
@@ -69,7 +68,7 @@ export class STMessage extends STObject {
 		return this.parameters[index].value;
 	}
 
-	public getSelector(): STSelector {
+	public getSelector(): string {
 		let selectorStr = "";
 		let lastIndex = this.parameters.length - 1;
 
@@ -82,6 +81,6 @@ export class STMessage extends STObject {
 			}
 		}
 
-		return new STSelector(selectorStr);
+		return selectorStr;
 	}
 }

@@ -2,7 +2,6 @@ import { STObject } from "./STObject";
 import { STMessage, STMessageParameter } from "./STMessage";
 import { STNil } from "./STNil";
 import { STInstance } from "./STInstance";
-import { STSelector } from "./STSelector";
 import { STObjectBase } from "./STObjectBase";
 import { STString } from "./STString";
 import { STBlock } from "./STBlock";
@@ -56,7 +55,7 @@ export class STClass extends STObjectBase {
 
 	// Override
 	protected handleMessage(message: STMessage): STObject {
-		let selector: string = message.getSelector().value;
+		let selector: string = message.getSelector();
 
 		if (selector in this.classMethods) {
 			return this.classMethods[selector](message.parameters);
@@ -78,7 +77,7 @@ export class STClass extends STObjectBase {
 	}
 
 	public receiveInstanceMessage(instance: STInstance, message: STMessage): STObject {
-		let selector: string = message.getSelector().value;
+		let selector: string = message.getSelector();
 
 		// TODO: Implement Smalltalk superclasses and delegates
 

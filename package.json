@@ -4,7 +4,7 @@
   "description": "Smalltalk interpreter",
   "main": "build/main/ts/index.js",
   "scripts": {
-    "main": "node build/main/ts/index.js",
+    "main": "node build/main/ts/main.js",
     "test": "node build/test/ts/index.js"
   },
   "keywords": [

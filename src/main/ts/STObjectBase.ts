@@ -29,7 +29,7 @@ export class STObjectBase extends STObject {
 
 	// Override
 	protected handleMessage(message: STMessage): STObject {
-		let selector: string = message.getSelector().value;
+		let selector: string = message.getSelector();
 
 		let preMethodHandlerResult = this.preMethodHandler(message);
 		if (!preMethodHandlerResult.isNil()) {
