@@ -1,5 +1,5 @@
 {
-  "name": "balloon",
+  "name": "smallballoon",
   "version": "1.0.0",
   "description": "Smalltalk interpreter",
   "main": "build/main/ts/index.js",
@@ -17,6 +17,6 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/fwcd/Balloon.git"
+    "url": "git://github.com/fwcd/SmallBalloon.git"
   }
 }

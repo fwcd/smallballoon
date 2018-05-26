@@ -1,4 +1,4 @@
-# Balloon
+# SmallBalloon
 A Smalltalk interpreter for JavaScript/TypeScript. A quick example:
 
 ```smalltalk
