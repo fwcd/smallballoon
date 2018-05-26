@@ -5,6 +5,7 @@ import { STTypeException } from "../utils/STTypeException";
 import { STNil } from "../STNil";
 import { STBoolean } from "../STBoolean";
 import { STBlock } from "../STBlock";
+import { STJSObject } from "../api/STJSObject";
 
 const STRIP_COMMENTS_REGEX = /((\/\/.*$)|(\/\*[\s\S]*?\*\/))/mg;
 const ARGUMENT_NAMES_REGEX = /([^\s,]+)/g;
@@ -60,6 +61,7 @@ export function toJavaScriptObjectIgnoreNull(stObject: STObject): any {
 
 	let result: any = undefined;
 	stObject.whenMatches(STString, obj => result = obj.value)
+			.whenMatches(STJSObject, obj => result = obj.getObject())
 			.whenMatches(STBoolean, obj => result = obj.value)
 			.whenMatches(STNumber, obj => result = obj.value)
 			.whenMatches(STNil, obj => result = null)

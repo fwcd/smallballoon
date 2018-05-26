@@ -40,9 +40,15 @@ export class Logger {
 
 				if (this.substringStartsWith(charIndex, msg, "{}")) {
 					// Insert placeholder
-					output += insertions[placeholderIndex];
+					let placeholder: string = insertions[placeholderIndex];
+					if (placeholder === undefined) {
+						placeholder = "undefined";
+					} else if (placeholder === null) {
+						placeholder = "null";
+					}
+					output += placeholder;
 					placeholderIndex++;
-					charIndex += 2;
+					charIndex += placeholder.length;
 				} else if (this.substringStartsWith(charIndex, msg, "{:?}")) {
 					// Insert placeholder as JSON
 					output += JSON.stringify(insertions[placeholderIndex]);
