@@ -75,8 +75,8 @@ export class STBlock extends STObjectBase {
 	public evaluateWithArgs(...explicitParameterValues: STObject[]) {
 		let parameters: STMessageParameter[] = [];
 
-		if (explicitParameterValues.length !== this.explicitParameters.length) {
-			throw new STGeneralException("Expected block parameters (" + this.explicitParameters + ") do not match the amount of provided arguments (" + explicitParameterValues + ")");
+		if (explicitParameterValues.length < this.explicitParameters.length) {
+			throw new STGeneralException("Too few provided arguments [" + explicitParameterValues + "], expecting [" + this.explicitParameters + "]");
 		}
 
 		for (let i=0; i<explicitParameterValues.length; i++) {
