@@ -4,6 +4,7 @@ import { STNumber } from "../STNumber";
 import { STString } from "../STString";
 import { toSmalltalkObject, toJavaScriptObject } from "./STJSUtils";
 import { STNil } from "../STNil";
+import { STTypeException } from "../utils/STTypeException";
 
 export class STJSObject extends STObjectBase {
 	private jsObject: any;
@@ -32,6 +33,18 @@ export class STJSObject extends STObjectBase {
 
 			return new STJSObject(result);
 		});
+	}
+
+	public getObject(): any {
+		return this.jsObject;
+	}
+
+	public getObjectAs<T>(castedType: { new(...args: any[]): T }): T {
+		if (this.jsObject instanceof castedType) {
+			return this.jsObject;
+		} else {
+			throw new STTypeException(this.jsObject + " (of type " + (typeof this.jsObject) + ") does not match " + castedType);
+		}
 	}
 
 	// Override
