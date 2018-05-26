@@ -9,6 +9,8 @@ export * from "./api/STTranscript"
 
 export * from "./parse/ast/AbstractSyntaxTree"
 
+export * from "./utils/Logger"
+
 export * from "./STBlock"
 export * from "./STBoolean"
 export * from "./STClass"

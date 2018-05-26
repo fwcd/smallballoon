@@ -12,7 +12,7 @@ export enum LogLevel {
  * Basic logging abstraction supporting
  * different log levels.
  */
-class Logger {
+export class Logger {
 	level: LogLevel;
 
 	public constructor(level: LogLevel) {

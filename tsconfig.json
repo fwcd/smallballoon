@@ -3,6 +3,7 @@
 		"module": "commonjs",
 		"outDir": "build",
 		"target": "es5",
+		"declaration": true,
 		"moduleResolution": "node"
 	},
 	"exclude": [
