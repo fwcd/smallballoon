@@ -3,16 +3,19 @@ import { STNumber } from "../STNumber";
 import { STString } from "../STString";
 import { STTypeException } from "../utils/STTypeException";
 import { STNil } from "../STNil";
+import { STBoolean } from "..";
 
 export function toSmalltalkObject(jsObject: any): STObject {
 	if (jsObject == null || jsObject == undefined) {
 		return new STNil("STJSUtils.toSmalltalkObject(...)");
-	} else if (this.jsObject instanceof STObject) {
-		return this.jsObject;
-	} else if (!isNaN(jsObject)) {
-		return new STNumber(this.jsObject);
+	} else if (jsObject instanceof STObject) {
+		return jsObject;
+	} else if (typeof jsObject === "number" || !isNaN(jsObject)) {
+		return new STNumber(jsObject);
+	} else if (typeof jsObject === "boolean") {
+		return STBoolean.from(jsObject);
 	} else {
-		return new STString(this.jsObject);
+		return new STString(jsObject);
 	}
 }
 
@@ -23,6 +26,7 @@ export function toJavaScriptObject(stObject: STObject): any {
 
 	let result: any = undefined;
 	stObject.whenMatches(STString, obj => result = obj.value)
+			.whenMatches(STBoolean, obj => result = obj.value)
 			.whenMatches(STNumber, obj => result = obj.value)
 			.whenMatches(STNil, obj => result = null)
 
