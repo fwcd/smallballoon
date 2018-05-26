@@ -1,5 +1,4 @@
 import { STMessage } from "./STMessage";
-import { STNil } from "./STNil";
 import { LOG } from "./utils/Logger";
 import { STTypeException } from "./utils/STTypeException";
 import { STDoesNotUnderstandException } from "./utils/STDoesNotUnderstandException";
@@ -27,7 +26,6 @@ export class STObject {
 
 	protected doesNotUnderstand(message: STMessage): STObject {
 		throw new STDoesNotUnderstandException(this, message);
-		// return new STNil(toString() + " which does not understand " + message.getSelector().value);
 	}
 
 	// Intended to be overriden by subclasses
