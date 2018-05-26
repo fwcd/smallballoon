@@ -10,6 +10,8 @@ import { LOG } from "../utils/Logger";
 export class STParser {
 	private ast: AbstractSyntaxTree;
 
+	// TODO: Refactor repetitive stack parsers to a common function
+
 	public constructor(rawCode: string) {
 		let formattedCode: string = rawCode.replace(/(\r\n|\n|\r)/gm, ""); // Remove line breaks
 		LOG.deepTrace("Creating AST from: {}", formattedCode);
@@ -188,10 +190,12 @@ export class STParser {
 
 				if (c === "\"") {
 					inString = !inString;
-				} else if (this.isOpeningBracket(c)) {
-					stackHeight++;
-				} else if (this.isClosingBracket(c)) {
-					stackHeight--;
+				} else if (!inString) {
+					if (this.isOpeningBracket(c)) {
+						stackHeight++;
+					} else if (this.isClosingBracket(c)) {
+						stackHeight--;
+					}
 				}
 			}
 		}
@@ -212,10 +216,12 @@ export class STParser {
 
 			if (c === "\"") {
 				inString = !inString;
-			} else if (this.isOpeningBracket(c)) {
-				stackHeight++;
-			} else if (this.isClosingBracket(c)) {
-				stackHeight--;
+			} else if (!inString) {
+				if (this.isOpeningBracket(c)) {
+					stackHeight++;
+				} else if (this.isClosingBracket(c)) {
+					stackHeight--;
+				}
 			}
 			i++;
 		} while (stackHeight > 0 || c !== " " || inString);
@@ -245,12 +251,14 @@ export class STParser {
 
 				if (c === "\"") {
 					inString = !inString;
-				} else if (this.isOpeningBracket(c)) {
-					LOG.deepTrace("Opening {} in {}", c, rawParameters);
-					stackHeight++;
-				} else if (this.isClosingBracket(c)) {
-					LOG.deepTrace("Closing {} in {}", c, rawParameters);
-					stackHeight--;
+				} else if (!inString) {
+					if (this.isOpeningBracket(c)) {
+						LOG.deepTrace("Opening {} in {}", c, rawParameters);
+						stackHeight++;
+					} else if (this.isClosingBracket(c)) {
+						LOG.deepTrace("Closing {} in {}", c, rawParameters);
+						stackHeight--;
+					}
 				}
 			}
 

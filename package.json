@@ -1,6 +1,6 @@
 {
   "name": "smallballoon",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "Smalltalk interpreter",
   "main": "build/main/ts/index.js",
   "types": "build/main/ts/index.d.js",

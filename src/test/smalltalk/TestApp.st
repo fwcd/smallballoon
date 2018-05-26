@@ -84,3 +84,6 @@ testBlock := [
 	varA times:varB.
 ].
 Transcript show:((testBlock value) asString).
+
+Transcript show:"=== String with parentheses testing ===".
+Transcript show:(("testA(" and:") testB [") and:"] testC").
