@@ -139,7 +139,7 @@ export class STParser {
 	}
 
 	private getAssignmentNode(expression: string): AssignmentNode {
-		let splittedExpression: string[] = strSplitWithTail(expression, ":=", 2).map(str => str.trim());
+		let splittedExpression: string[] = strSplitWithTail(expression, ":=", 1).map(str => str.trim());
 		return new AssignmentNode(splittedExpression[0], this.parse(splittedExpression[1]));
 	}
 

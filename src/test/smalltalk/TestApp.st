@@ -75,3 +75,12 @@ testSet insert:"one".
 testSet insert:"two".
 Transcript show:(testSet contains:"three").
 Transcript show:(testSet contains:"one").
+
+Transcript show:"=== Block assignment testing ===".
+testBlock := [
+	| varA varB |
+	varA := 4.
+	varB := 3.
+	varA times:varB.
+].
+Transcript show:((testBlock value) asString).
