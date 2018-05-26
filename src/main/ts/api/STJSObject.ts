@@ -62,6 +62,12 @@ export class STJSObject extends STObjectBase {
 
 	// Override
 	public toString(): string {
-		return this.jsObject.toString();
+		if (this.jsObject === undefined) {
+			return "undefined (STJSObject)";
+		} else if (this.jsObject === null) {
+			return "null (STJSObject)";
+		} else {
+			return this.jsObject.toString();
+		}
 	}
 }
