@@ -14,24 +14,36 @@ import { STRuntime } from "./api/STRuntime";
  */
 export class STContext {
 	public readonly id = Math.floor(Math.random() * 1024);
-	private variables: { [name: string] : STObject; } = {};
+	public readonly jsContext: any = undefined;
 	public readonly delegates: STContext[] = [];
+	private variables: { [name: string] : STObject; } = {};
 
-	private constructor() {}
+	private constructor(jsContext: any) {
+		this.jsContext = jsContext;
+	}
 
 	public static create(): STContext {
-		let instance = new STContext();
+		return STContext.createWith(undefined);
+	}
+
+	/**
+	 * Creates a new STContext and associates a given
+	 * JavaScript context with it (to access scoped
+	 * variables using the Smalltalk-JS bridge for example)
+	 */
+	public static createWith(jsContext: any): STContext {
+		let instance = new STContext(jsContext);
 		instance.setVariableLocally("Transcript", new STTranscript());
 		instance.setVariableLocally("Object", new STClass());
 		instance.setVariableLocally("true", STBoolean.TRUE);
 		instance.setVariableLocally("false", STBoolean.FALSE);
-		instance.setVariableLocally("JS", new STJSRuntime());
+		instance.setVariableLocally("JS", new STJSRuntime(instance));
 		instance.setVariableLocally("Runtime", new STRuntime(instance));
 		return instance;
 	}
 
 	public asDelegate(): STContext {
-		let result = new STContext();
+		let result = new STContext(this.jsContext);
 		result.delegates.push(this);
 		return result;
 	}

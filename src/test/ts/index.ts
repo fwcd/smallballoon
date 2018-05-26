@@ -6,5 +6,10 @@ import { STString } from "../../main/ts/STString";
 
 LOG.level = LogLevel.Info;
 
+this.square = function (value: number): number {
+	return value * value;
+}
+
 let interpreter = new STLoader();
+interpreter.setJSContext(this);
 interpreter.runFile("src/test/smalltalk/TestApp.st");

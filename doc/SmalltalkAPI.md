@@ -112,8 +112,8 @@ An API class that allows Smalltalk to call JavaScript code.
 
 | Method | Description |
 | ------ | ----------- |
-| run:String -> Object | Runs JavaScript code and returns the result as Object or Number if appropriate, otherwise as String |
-| get:String -> JSObject | Fetches a reference to the provided JS object and returns a Smalltalk wrapper |
+| eval:String -> Object | Runs JavaScript code and tries to convert the result to a Smalltalk type |
+| get:String -> JSObject | Runs JavaScript code and returns a reference to the provided JS object in a Smalltalk wrapper |
 
 ### JSObject
 A wrapper for a JavaScript object that is accessible from Smalltalk.
@@ -123,7 +123,8 @@ A wrapper for a JavaScript object that is accessible from Smalltalk.
 | toSTObject -> Object | Tries to convert the object to a Smalltalk representation (Object or Number, otherwise String) |
 | mapUsingJS:String -> Object | Interprets the parameter as JavaScript code with "this" representing this object and wraps the evaluated result in another JSObject |
 | getProperty:Object -> Object | Returns the wrapped JS object after calling the subscript operator using the given parameter |
-| setProperty:Object to:Object -> Nil | Associates the second argument with this object after calling the subscript operator using the first argument |
+| evalProperty:Object -> Object | Returns the JS object converted to a Smalltalk type after calling the subscript operator using the given parameter |
+| setProperty:Object to:Object -> Nil | Associates the second argument with this object (converted to a JS type) after calling the subscript operator using the first argument |
 
 Interprets other messages as method calls on this particular JS object. For example:
 

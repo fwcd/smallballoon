@@ -2,14 +2,15 @@ import { STObjectBase } from "../STObjectBase";
 import { STObject } from "../STObject";
 import { STNumber } from "../STNumber";
 import { STString } from "../STString";
-import { toSmalltalkObject, toJavaScriptObject } from "./STJSUtils";
+import { toSmalltalkObject, toJavaScriptObject, evalWith } from "./STJSUtils";
 import { STNil } from "../STNil";
 import { STTypeException } from "../utils/STTypeException";
+import { STContext } from "../STContext";
 
 export class STJSObject extends STObjectBase {
 	private jsObject: any;
 
-	public constructor(jsObject: any) {
+	public constructor(stContext: STContext, jsObject: any) {
 		super();
 		this.jsObject = jsObject;
 		this.addMethod("toSTObject", msg => {
@@ -17,13 +18,16 @@ export class STJSObject extends STObjectBase {
 		});
 		this.addMethod("mapUsingJS:", msg => {
 			let raw = msg.getValue(0).expect(STString).value.replace("this", "jsObject");
-			return new STJSObject(eval(raw));
+			return new STJSObject(stContext, eval(raw));
 		});
 		this.addMethod("getProperty:", msg => {
-			return new STJSObject(this.jsObject[<any>msg.getValue(0)]);
+			return new STJSObject(stContext, this.jsObject[toJavaScriptObject(msg.getValue(0))]);
+		});
+		this.addMethod("evalProperty:", msg => {
+			return toSmalltalkObject(this.jsObject[toJavaScriptObject(msg.getValue(0))]);
 		});
 		this.addMethod("setProperty:to:", msg => {
-			jsObject[<any>msg.getValue(0)] = msg.getValue(1);
+			jsObject[toJavaScriptObject(msg.getValue(0))] = toJavaScriptObject(msg.getValue(1));
 			return new STNil("STJSObject while calling setProperty:to:");
 		});
 		this.setPostMethodHandler(msg => {
@@ -35,7 +39,7 @@ export class STJSObject extends STObjectBase {
 			}
 
 			let result = this.jsObject[methodName].apply(this.jsObject, parameters);
-			return new STJSObject(result);
+			return new STJSObject(stContext, result);
 		});
 	}
 

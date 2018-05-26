@@ -30,7 +30,7 @@ export class Logger {
 	 * @param msgLevel - The log level of the message
 	 */
 	private log(prefix: string, msg: string, insertions: any[], msgLevel: LogLevel): void {
-		if (this.level <= msgLevel) {
+		if (this.uses(msgLevel)) {
 			let output = prefix;
 			let charIndex = 0;
 			let placeholderIndex = 0;
@@ -65,6 +65,10 @@ export class Logger {
 			}
 		}
 		return true;
+	}
+
+	public uses(level: LogLevel) {
+		return this.level <= level;
 	}
 
 	public deepTrace(msg: string, ...insertions: any[]): void {

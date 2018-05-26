@@ -4,6 +4,8 @@ import { STObjectBase } from "./STObjectBase";
 import { STBoolean } from "./STBoolean";
 import { STNil } from "./STNil";
 import { STEmpty } from "./STEmpty";
+import { STGeneralException } from "./utils/STGeneralException";
+import { LOG, LogLevel } from "./utils/Logger";
 
 export type STBlockEvaluator = (implicitParameters: STMessageParameter[], explicitParameters: STMessageParameter[]) => STObject;
 
@@ -55,17 +57,40 @@ export class STBlock extends STObjectBase {
 			return new STNil(this);
 		});
 		this.setPostMethodHandler((msg) => {
-			this.evaluateWith([], msg.parameters);
-			return STEmpty.getInstance();
+			return this.evaluateWith([], msg.parameters);
 		});
 	}
 
 	public evaluateWith(implicitParameters: STMessageParameter[], explicitParameters: STMessageParameter[]): STObject {
+		if (LOG.uses(LogLevel.Trace)) {
+			LOG.trace(
+				"Evaluating Block with [{}], [{}]",
+				implicitParameters.map(p => p.label + " = " + p.value),
+				explicitParameters.map(p => p.label + " = " + p.value)
+			);
+		}
 		return this.evaluator(implicitParameters, explicitParameters);
 	}
 
+	public evaluateWithArgs(...explicitParameterValues: STObject[]) {
+		let parameters: STMessageParameter[] = [];
+
+		if (explicitParameterValues.length !== this.explicitParameters.length) {
+			throw new STGeneralException("Expected block parameters (" + this.explicitParameters + ") do not match the amount of provided arguments (" + explicitParameterValues + ")");
+		}
+
+		for (let i=0; i<explicitParameterValues.length; i++) {
+			parameters.push({
+				label: this.explicitParameters[i],
+				value: explicitParameterValues[i]
+			});
+		}
+
+		return this.evaluateWith([], parameters);
+	}
+
 	public evaluate(): STObject {
-		return this.evaluator([], []);
+		return this.evaluateWith([], []);
 	}
 
 	// Override

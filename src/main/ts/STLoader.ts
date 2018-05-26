@@ -9,10 +9,15 @@ import { STObject } from "./STObject";
  * Smalltalk source code/file loader.
  */
 export class STLoader {
-	private contextType: { create(): STContext } = STContext;
+	private jsContext: any;
 
-	public setContextType(contextType: { create(): STContext }) {
-		this.contextType = contextType;
+	/**
+	 * Sets the "this"-context used when
+	 * calling eval(...) in the Smalltalk-JavaScript
+	 * bridge.
+	 */
+	public setJSContext(jsContext: any) {
+		this.jsContext = jsContext;
 	}
 
 	public runFile(fileName: string): STObject {
@@ -23,7 +28,7 @@ export class STLoader {
 	public runSTCode(rawCode: string): STObject {
 		let ast = this.createAST(rawCode);
 		LOG.trace("Running AST: {}", ast);
-		return ast.runWith(this.contextType.create());
+		return ast.runWith(STContext.createWith(this.jsContext));
 	}
 
 	public createASTFromFile(fileName: string): AbstractSyntaxTree {

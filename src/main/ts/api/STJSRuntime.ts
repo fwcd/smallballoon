@@ -4,19 +4,21 @@ import { STObject } from "../STObject";
 import { STNumber } from "../STNumber";
 import { STBoolean } from "../STBoolean";
 import { STJSObject } from "./STJSObject";
-import { toSmalltalkObject } from "./STJSUtils";
+import { toSmalltalkObject, evalWith } from "./STJSUtils";
+import { STContext } from "../STContext";
 
 export class STJSRuntime extends STObjectBase {
-	public constructor() {
+	public constructor(stContext: STContext) {
 		super();
-		this.addMethod("run:", msg => {
-			let result = eval(msg.getValue(0).expect(STString).value);
-			return toSmalltalkObject(result);
+		this.addMethod("eval:", msg => {
+			let rawJS = msg.getValue(0).expect(STString).value;
+			let jsObject = evalWith(stContext.jsContext, this, rawJS);
+			return toSmalltalkObject(jsObject);
 		});
 		this.addMethod("get:", msg => {
-			let jsCode = msg.getValue(0).expect(STString).value;
-			let jsObject = eval(jsCode);
-			return new STJSObject(jsObject);
+			let rawJS = msg.getValue(0).expect(STString).value;
+			let jsObject = evalWith(stContext.jsContext, this, rawJS);
+			return new STJSObject(stContext, jsObject);
 		});
 	}
 

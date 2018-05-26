@@ -26,7 +26,7 @@ i := 0.
 ].
 
 Transcript show:"=== JS-bridge testing ===".
-JS run:"console.log('Hello JavaScript!')".
+JS eval:"console.log('Hello JavaScript!')".
 (JS get:"console") log:"Hello JSObject!".
 jsArray := JS get:"[]".
 jsArray push:4.
@@ -87,3 +87,10 @@ Transcript show:((testBlock value) asString).
 
 Transcript show:"=== String with parentheses testing ===".
 Transcript show:(("testA(" and:") testB [") and:"] testC").
+
+Transcript show:"=== JS bridge function conversion testing ===".
+Transcript show:((JS eval:"this.square") value:5).
+(JS get:"this") setProperty:"cube" to:[:value |
+	value pow:3.
+].
+Transcript show:(JS eval:"this.cube(4)").
