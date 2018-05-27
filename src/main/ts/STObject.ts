@@ -17,7 +17,7 @@ export class STObject {
 
 	// Do not override this method!!
 	public receiveMessage(message: STMessage): STObject {
-		LOG.debug("{} received {}", this, message);
+		LOG.trace("{} received {}", this, message);
 		return this.receiveMessageSilently(message);
 	}
 
