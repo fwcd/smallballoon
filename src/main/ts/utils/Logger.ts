@@ -32,31 +32,40 @@ export class Logger {
 	private log(prefix: string, msg: string, insertions: any[], msgLevel: LogLevel): void {
 		if (this.uses(msgLevel)) {
 			let output = prefix;
-			let charIndex = 0;
-			let placeholderIndex = 0;
 
-			while (charIndex < msg.length) {
-				let c = msg.charAt(charIndex);
+			try {
+				let charIndex = 0;
+				let placeholderIndex = 0;
 
-				if (this.substringStartsWith(charIndex, msg, "{}")) {
-					// Insert placeholder
-					let placeholder: string = insertions[placeholderIndex];
-					if (placeholder === undefined) {
-						placeholder = "undefined";
-					} else if (placeholder === null) {
-						placeholder = "null";
+				while (charIndex < msg.length) {
+					let c = msg.charAt(charIndex);
+
+					if (this.substringStartsWith(charIndex, msg, "{}")) {
+						// Insert placeholder
+						let placeholder: string = insertions[placeholderIndex];
+						if (placeholder === undefined) {
+							placeholder = "undefined";
+						} else if (placeholder === null) {
+							placeholder = "null";
+						}
+						output += placeholder;
+						placeholderIndex++;
+						charIndex += 2;
+					} else if (this.substringStartsWith(charIndex, msg, "{:?}")) {
+						// Insert placeholder as JSON
+						output += JSON.stringify(insertions[placeholderIndex]);
+						placeholderIndex++;
+						charIndex += 4;
+					} else {
+						output += c;
+						charIndex++;
 					}
-					output += placeholder;
-					placeholderIndex++;
-					charIndex += placeholder.length;
-				} else if (this.substringStartsWith(charIndex, msg, "{:?}")) {
-					// Insert placeholder as JSON
-					output += JSON.stringify(insertions[placeholderIndex]);
-					placeholderIndex++;
-					charIndex += 4;
-				} else {
-					output += c;
-					charIndex++;
+				}
+			} catch (e) {
+				try {
+					output = prefix + "Exception while logging: " + e;
+				} catch (e2) {
+					output = prefix + "Exception while logging (could not be printed).";
 				}
 			}
 
