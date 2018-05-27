@@ -42,13 +42,18 @@ export class Logger {
 
 					if (this.substringStartsWith(charIndex, msg, "{}")) {
 						// Insert placeholder
-						let placeholder: string = insertions[placeholderIndex];
+						let placeholder: any = insertions[placeholderIndex];
+						let placeholderStr: string;
 						if (placeholder === undefined) {
-							placeholder = "undefined";
+							placeholderStr = "undefined";
 						} else if (placeholder === null) {
-							placeholder = "null";
+							placeholderStr = "null";
+						} else if (typeof placeholder === "function") {
+							placeholderStr = placeholder();
+						} else {
+							placeholderStr = placeholder;
 						}
-						output += placeholder;
+						output += placeholderStr;
 						placeholderIndex++;
 						charIndex += 2;
 					} else if (this.substringStartsWith(charIndex, msg, "{:?}")) {

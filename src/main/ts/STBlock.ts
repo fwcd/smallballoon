@@ -62,13 +62,11 @@ export class STBlock extends STObjectBase {
 	}
 
 	public evaluateWith(implicitParameters: STMessageParameter[], explicitParameters: STMessageParameter[]): STObject {
-		if (LOG.uses(LogLevel.Trace)) {
-			LOG.trace(
-				"Evaluating Block with [{}], [{}]",
-				implicitParameters.map(p => p.label + " = " + p.value),
-				explicitParameters.map(p => p.label + " = " + p.value)
-			);
-		}
+		LOG.trace(
+			"Evaluating Block with [{}], [{}]",
+			() => implicitParameters.map(p => p.label + " = " + p.value),
+			() => explicitParameters.map(p => p.label + " = " + p.value)
+		);
 		return this.evaluator(implicitParameters, explicitParameters);
 	}
 
